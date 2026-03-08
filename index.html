@@ -1257,9 +1257,10 @@ function genWA(p) {
   t+=`\u274C \u091A\u0940\u0928\u0940 \u0928\u0939\u0940\u0902\n\n*Nutrition:* Protein ~${p.totals.protein}g, Carbs ~${p.totals.carbs}g, Cal ~${p.totals.cal} kcal`;
   return t;
 }
-function copyWA() {
-  navigator.clipboard.writeText(genWA(tmrPlan())).catch(()=>{});
-  S.waCopied=true; render(); setTimeout(()=>{S.waCopied=false;render();},2500);
+function copyWA(){
+ const msg = genWA(tmrPlan());
+ const url = "https://wa.me/?text=" + encodeURIComponent(msg);
+ window.open(url,"_blank");
 }
 function sendTodayWA(){
   const msg = genWA(S.day);
