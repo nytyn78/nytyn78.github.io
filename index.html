@@ -1944,5 +1944,12 @@ try {
   document.getElementById('app').innerHTML = '<div style="padding:20px;font-family:Georgia,serif;color:#c00"><b>Error loading app:</b><br/>' + e.message + '<br/><pre style="font-size:11px;margin-top:10px;white-space:pre-wrap">' + e.stack + '</pre></div>';
 }
 </script>
+
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/service-worker.js");
+}
+</script>
+
 </body>
 </html>
