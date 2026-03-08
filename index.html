@@ -1261,7 +1261,11 @@ function copyWA() {
   navigator.clipboard.writeText(genWA(tmrPlan())).catch(()=>{});
   S.waCopied=true; render(); setTimeout(()=>{S.waCopied=false;render();},2500);
 }
-
+function sendTodayWA(){
+  const msg = genWA(S.day);
+  const url = "https://wa.me/?text=" + encodeURIComponent(msg);
+  window.open(url,"_blank");
+}
 // ─── SVG COMPONENTS ─────────────────────────────────────────────────
 function Ring(val,max,color,size,label,unit) {
   const r=(size-12)/2, C=2*Math.PI*r, pct=Math.min(val/max,1), ov=val>max;
@@ -1548,9 +1552,9 @@ function tabTomorrow() {
     <div class="card" style="background:#E8F5E9;border:1px solid #A5D6A7">
       <div style="font-size:14px;font-weight:700;color:var(--green);margin-bottom:8px">📤 Send to Cook</div>
       <div style="font-size:12px;color:#555;margin-bottom:12px">Full Hindi + English — forward on WhatsApp</div>
-      <button onclick="copyWA()" style="width:100%;padding:12px;background:${S.waCopied?'var(--green)':'#25D366'};color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;transition:background .3s">
-        ${S.waCopied?'✓ Copied! Paste in WhatsApp':'📋 Copy WhatsApp Message'}
-      </button>
+      <button onclick="sendTodayWA()" style="width:100%;padding:12px;background:#25D366;color:white;border:none;border-radius:10px;">
+📤 Send WhatsApp Message
+</button>
     </div>
 
     ${meals}
