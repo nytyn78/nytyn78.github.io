@@ -1946,6 +1946,36 @@ try {
 </script>
 
 <script>
+let deferredPrompt;
+
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+
+  const installBtn = document.createElement("button");
+  installBtn.innerText = "Install App";
+  installBtn.style.position = "fixed";
+  installBtn.style.bottom = "20px";
+  installBtn.style.right = "20px";
+  installBtn.style.padding = "10px 16px";
+  installBtn.style.background = "#0f766e";
+  installBtn.style.color = "white";
+  installBtn.style.border = "none";
+  installBtn.style.borderRadius = "8px";
+  installBtn.style.zIndex = "9999";
+
+  document.body.appendChild(installBtn);
+
+  installBtn.addEventListener("click", async () => {
+    installBtn.remove();
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    deferredPrompt = null;
+  });
+});
+</script>
+
+<script>
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("/service-worker.js");
 }
