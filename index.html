@@ -1254,14 +1254,17 @@ function restoreMar11Entries() {
   day12.weight = null;
   day12.water = 0;
   LS.set('hlog_'+d12, day12);
-  // Force reload S.day from localStorage and push to Firebase, then reload page
+  LS.set('mar12_fixed', true);
+  // Update live state immediately
+  if(S.date === d12) { S.day.weight = null; S.day.water = 0; }
+  // Push fixed data to Firebase then reload
   setTimeout(() => {
     if(typeof fbPush === 'function') fbPush();
   }, 500);
   setTimeout(() => {
     alert('✅ Done! App will reload now.');
     location.reload();
-  }, 1200);
+  }, 1500);
 }
 
 // One-time fix: restore Mar 11 entries that were lost
@@ -1412,6 +1415,11 @@ async function fbPull() {
       // Restore today if same date
       if(data.today && data.today_date === S.date) {
         S.day = {...blankDay(), ...data.today};
+        // If Mar 12 weight/water fix has been applied, don't let cloud restore old values
+        if(S.date === '2026-03-12' && LS.get('mar12_fixed', false)) {
+          S.day.weight = null;
+          S.day.water = 0;
+        }
         saveDay(S.date, S.day);
       }
       if(data.done_ex && data.today_date === S.date) {
