@@ -1248,24 +1248,20 @@ function restoreMar11Entries() {
   if(i>=0) hist[i]=rec; else hist.push(rec);
   hist.sort((a,b)=>b.date.localeCompare(a.date));
   LS.set('hlog_history', hist);
-  // Fix Mar 12 — clear weight and water that belong to Mar 11
+  // Fix Mar 12 — clear weight and water
   const d12 = '2026-03-12';
   const day12 = LS.get('hlog_'+d12, null) || {};
   day12.weight = null;
   day12.water = 0;
   LS.set('hlog_'+d12, day12);
-  // Also update S.day if we're on Mar 12
-  if(S.date === d12) { S.day.weight = null; S.day.water = 0; }
-  // Push to Firebase
+  // Force reload S.day from localStorage and push to Firebase, then reload page
   setTimeout(() => {
-    if(typeof fbPush === 'function') {
-      fbPush();
-      alert('✅ Mar 11 entries restored. Mar 12 weight & water cleared. Synced to Firebase!');
-    } else {
-      alert('✅ Mar 11 entries restored. Mar 12 weight & water cleared.');
-    }
+    if(typeof fbPush === 'function') fbPush();
   }, 500);
-  render();
+  setTimeout(() => {
+    alert('✅ Done! App will reload now.');
+    location.reload();
+  }, 1200);
 }
 
 // One-time fix: restore Mar 11 entries that were lost
