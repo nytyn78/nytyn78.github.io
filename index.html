@@ -1359,7 +1359,10 @@ async function fbInit(cfg) {
 
     // Fixed user ID — never changes even if app data is cleared
     fbUser = 'nitin_nytyn78';
-    await fbPull();
+    // Only pull from Firebase if local data is empty (first install)
+    // Otherwise always trust local data and just push
+    const hasLocalData = LS.get('hlog_history', []).length > 0;
+    if(!hasLocalData) await fbPull();
     fbWatch();
   } catch(e) { console.warn('Firebase init failed:', e.message); }
 }
