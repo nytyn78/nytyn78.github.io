@@ -1992,8 +1992,11 @@ function addFood(food,qty) {
   }
   S.day.entries.push(entry);
   // Auto-stop fast if food is caloric (>=20 kcal) and fast is running
-  if((sc.cal||0) >= 20 && S.day.fasting && S.day.fastStart) {
-    const sessionSecs = Math.floor((ts - S.day.fastStart) / 1000);
+  if((sc.cal||0) >= 20 && S.day.fasting) {
+    // Use max of ts and fastStart to handle manual past-time entries
+    const stopTs = Math.max(ts, Date.now());
+    const startTs = S.day.fastStart || stopTs;
+    const sessionSecs = Math.floor((stopTs - startTs) / 1000);
     if(sessionSecs > 0) S.day.fastBest = Math.max(S.day.fastBest||0, sessionSecs);
     S.day.fasting = false;
     S.day.fastStart = null;
