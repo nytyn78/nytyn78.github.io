@@ -1226,46 +1226,6 @@ LS.set('start_weight', 116);
 })();
 
 // Manual restore function — callable from Settings button
-function restoreMar11Entries() {
-  const d11 = '2026-03-11';
-  const day11 = LS.get('hlog_'+d11, null) || {entries:[],weight:114.3,water:1.75,fasting:false,fastStart:null,fastBest:0,fastAccum:0,workouts:[]};
-  const t = (h,m) => new Date('2026-03-11T00:00:00').setHours(h,m,0,0);
-  const toRestore = [
-    {id:16100001, name:'Black coffee (1 cup, no sugar)', qty:1, protein:0.1, carbs:0, fat:0, cal:2, ts:t(10,6)},
-    {id:16100002, name:'Palak Paneer with Cream & Ghee', qty:1, protein:32, carbs:12, fat:48, cal:610, ts:t(14,55)},
-    {id:16100003, name:'Tandoori chicken (4 pieces, 200g)', qty:2, protein:46, carbs:14, fat:14, cal:600, ts:t(20,0)},
-    {id:16100004, name:'Butter, salted (1 tbsp / 14g)', qty:1, protein:0.1, carbs:0.1, fat:11.5, cal:102, ts:t(20,0)},
-  ];
-  const existingIds = (day11.entries||[]).map(e=>e.id);
-  const toAdd = toRestore.filter(e => !existingIds.includes(e.id));
-  day11.entries = [...(day11.entries||[]), ...toAdd];
-  LS.set('hlog_'+d11, day11);
-  // Update history summary for Mar 11
-  const hist = LS.get('hlog_history', []);
-  const totals = day11.entries.reduce((a,e)=>({protein:+(a.protein+(e.protein||0)).toFixed(1),carbs:+(a.carbs+(e.carbs||0)).toFixed(1),fat:+(a.fat+(e.fat||0)).toFixed(1),cal:a.cal+(e.cal||0)}),{protein:0,carbs:0,fat:0,cal:0});
-  const i = hist.findIndex(x=>x.date===d11);
-  const rec = {date:d11, cal:Math.round(totals.cal), protein:totals.protein, carbs:totals.carbs, fat:totals.fat, weight:114.3, water:1.75};
-  if(i>=0) hist[i]=rec; else hist.push(rec);
-  hist.sort((a,b)=>b.date.localeCompare(a.date));
-  LS.set('hlog_history', hist);
-  // Fix Mar 12 — clear weight, water and entries
-  const d12 = '2026-03-12';
-  const day12 = LS.get('hlog_'+d12, null) || {};
-  day12.weight = null;
-  day12.water = 0;
-  // Remove any entries with Mar 11 timestamps from Mar 12
-  const midnight12 = new Date('2026-03-12T00:00:00').getTime();
-  day12.entries = (day12.entries||[]).filter(e => (e.ts||0) >= midnight12);
-  LS.set('hlog_'+d12, day12);
-  // Update live S.day immediately
-  S.day.weight = null;
-  S.day.water = 0;
-  S.day.entries = day12.entries || [];
-  // Push then reload
-  setTimeout(() => { if(typeof fbPush === 'function') fbPush(); }, 500);
-  setTimeout(() => { alert('✅ Done! Reloading...'); location.reload(); }, 1500);
-}
-
 // One-time fix: restore Mar 11 entries that were lost
 (function fixMisplacedEntries() {
   const done = LS.get('entries_fixed_v4', false);
@@ -4057,11 +4017,6 @@ function tabSettings() {
         </div>
         <button onclick="setDiet(S.diet==='keto'?'lowcarb':'keto')" style="font-size:11px;color:var(--teal);background:var(--lt-teal);border:none;border-radius:8px;padding:4px 10px;font-weight:700">Switch</button>
       </div>
-    </div>
-
-    <div class="card" style="background:#FFF8E1;border:1px solid #FFE082">
-      <div style="font-size:13px;font-weight:700;color:var(--teal);margin-bottom:8px">🔧 Data Tools</div>
-      <button onclick="restoreMar11Entries()" style="width:100%;padding:10px;background:var(--lt-teal);color:var(--teal);border:1px solid var(--teal);border-radius:10px;font-size:13px;font-weight:700;margin-bottom:8px">Restore Mar 11 Entries → Firebase</button>
     </div>
 
     <div class="card" style="background:#FFF8E1;border:1px solid #FFE082">
