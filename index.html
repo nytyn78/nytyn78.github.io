@@ -1248,23 +1248,22 @@ function restoreMar11Entries() {
   if(i>=0) hist[i]=rec; else hist.push(rec);
   hist.sort((a,b)=>b.date.localeCompare(a.date));
   LS.set('hlog_history', hist);
-  // Fix Mar 12 — clear weight and water
+  // Fix Mar 12 — clear weight, water and entries
   const d12 = '2026-03-12';
   const day12 = LS.get('hlog_'+d12, null) || {};
   day12.weight = null;
   day12.water = 0;
+  // Remove any entries with Mar 11 timestamps from Mar 12
+  const midnight12 = new Date('2026-03-12T00:00:00').getTime();
+  day12.entries = (day12.entries||[]).filter(e => (e.ts||0) >= midnight12);
   LS.set('hlog_'+d12, day12);
-  LS.set('mar12_fixed', true);
-  // Update live state immediately
-  if(S.date === d12) { S.day.weight = null; S.day.water = 0; }
-  // Push fixed data to Firebase then reload
-  setTimeout(() => {
-    if(typeof fbPush === 'function') fbPush();
-  }, 500);
-  setTimeout(() => {
-    alert('✅ Done! App will reload now.');
-    location.reload();
-  }, 1500);
+  // Update live S.day immediately
+  S.day.weight = null;
+  S.day.water = 0;
+  S.day.entries = day12.entries || [];
+  // Push then reload
+  setTimeout(() => { if(typeof fbPush === 'function') fbPush(); }, 500);
+  setTimeout(() => { alert('✅ Done! Reloading...'); location.reload(); }, 1500);
 }
 
 // One-time fix: restore Mar 11 entries that were lost
@@ -1294,6 +1293,7 @@ function restoreMar11Entries() {
 })();
 
 const blankDay = () => ({entries:[],weight:null,water:0,fasting:false,fastStart:null,fastBest:0,fastAccum:0,workouts:[]});
+const safeDay = (d) => { d.entries=d.entries||[]; d.workouts=d.workouts||[]; return d; };
 const loadDay = d => LS.get('hlog_'+d,null) || blankDay();
 const saveDay = (d,v) => LS.set('hlog_'+d,v);
 
@@ -2431,7 +2431,7 @@ function tabToday() {
   const _t = tots(), _tg = tgt();
   // Meals bubble: count how many planned meals are logged
   const _plannedMeals = todayPlan()?.meals || [];
-  const _loggedMealCount = _plannedMeals.filter(m => S.day.entries.some(e => e.name === m.name)).length;
+  const _loggedMealCount = _plannedMeals.filter(m => (S.day.entries||[]).some(e => e.name === m.name)).length;
   const _totalMeals = _plannedMeals.length || 2;
   const _mealFrac = _loggedMealCount / _totalMeals; // 0, 0.5, 1
 
