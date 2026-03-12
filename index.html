@@ -1990,19 +1990,28 @@ function addFood(food,qty) {
     S.sel=null; S.srch=''; S.qty=1; S.logTime=''; persist(); render();
     return;
   }
-  S.day.entries.push(entry);
-  // Auto-stop fast if food is caloric (>=20 kcal) and fast is running
+  // Confirmation before breaking fast
   if((sc.cal||0) >= 20 && S.day.fasting) {
-    // Use max of ts and fastStart to handle manual past-time entries
     const stopTs = Math.max(ts, Date.now());
     const startTs = S.day.fastStart || stopTs;
-    const sessionSecs = Math.floor((stopTs - startTs) / 1000);
-    if(sessionSecs > 0) S.day.fastBest = Math.max(S.day.fastBest||0, sessionSecs);
+    const elapsed = Math.floor((stopTs - startTs) / 1000);
+    const hrs = Math.floor(elapsed/3600), mins = Math.floor((elapsed%3600)/60);
+    const elapsedStr = hrs > 0 ? hrs+'h '+mins+'m' : mins+'m';
+    if(!confirm('⚠️ You are currently fasting ('+elapsedStr+' elapsed).\nLogging this will break your fast. Continue?')) {
+      return; // user cancelled — don't add food
+    }
+    // User confirmed — stop the fast and save best time
+    if(elapsed > 0) S.day.fastBest = Math.max(S.day.fastBest||0, elapsed);
+    // Save fastStart so rmFood can restore it if deleted
+    S._lastFastStart = S.day.fastStart;
+    S._lastFastBest = S.day.fastBest;
+    S._fastBrokeByEntryId = entry.id;
     S.day.fasting = false;
     S.day.fastStart = null;
     S.fastElapsed = 0;
     if(S.fastTimer){ clearInterval(S.fastTimer); S.fastTimer=null; }
   }
+  S.day.entries.push(entry);
   S.sel=null; S.srch=''; S.qty=1; S.logTime=''; persist(); render();
 }
 
@@ -2017,6 +2026,17 @@ function fmtTime(ts) {
 function rmFood(id) {
   const removed = S.day.entries.find(e=>e.id===id);
   S.day.entries = S.day.entries.filter(e=>e.id!==id);
+  // If this entry broke the fast, offer to restore fasting state
+  if(S._fastBrokeByEntryId === id && S._lastFastStart) {
+    if(confirm('This meal broke your fast. Restore fasting timer?')) {
+      S.day.fasting = true;
+      S.day.fastStart = S._lastFastStart;
+      S.day.fastBest = S._lastFastBest || 0;
+      S._lastFastStart = null; S._lastFastBest = null; S._fastBrokeByEntryId = null;
+      persist(); render(); return;
+    }
+    S._lastFastStart = null; S._lastFastBest = null; S._fastBrokeByEntryId = null;
+  }
   persist();
   // Store for undo
   _undoEntry = removed;
@@ -2318,11 +2338,24 @@ function MealRow(meal,time,label,key,isTmr=false) {
   </div>`;
 }
 
+function logShake() {
+  const f = FOOD_DB.find(x => x.name === 'Isopure Whey (1 scoop, 31g)');
+  if(f) { addFood(f, 1); }
+  else {
+    const entry = {id:Date.now(), name:'Isopure Whey (1 scoop, 31g)', qty:1, protein:25, carbs:3, fat:1.5, cal:110, ts:Date.now()};
+    if(!S.day.entries) S.day.entries=[];
+    S.day.entries.push(entry);
+    persist(); render();
+  }
+}
+
 function Shake() {
+  const logged = (S.day.entries||[]).some(e => e.name === 'Isopure Whey (1 scoop, 31g)');
   return `<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;margin-bottom:6px;background:#F8FFFE;border:1.5px solid #E8F0EE">
     <div style="width:50px;flex-shrink:0"><div style="font-size:10px;color:var(--teal);font-weight:700">4:00 PM</div><div style="font-size:10px;color:#AAA">Shake</div></div>
-    <div><div style="font-size:13px;font-weight:700;color:var(--dark)">Isopure Whey — 1 scoop / 300ml water</div>
+    <div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--dark)">Isopure Whey — 1 scoop / 300ml water</div>
     <div style="font-size:11px;color:#888;margin-top:2px">25g protein · 3g carbs · 110 kcal</div></div>
+    <button onclick="logShake()" style="flex-shrink:0;padding:7px 12px;background:${logged?'#E8F5E9':'var(--teal)'};color:${logged?'var(--green)':'#fff'};border:none;border-radius:8px;font-size:12px;font-weight:700">${logged?'✓':'Log'}</button>
   </div>`;
 }
 
