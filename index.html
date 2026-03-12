@@ -2441,7 +2441,7 @@ function tabToday() {
     { icon:'🥩', line1:'Protein',  line2:'Target',   done: _t.protein >= _tg.protein*0.9,                                 action:"S.tab='log';render()" },
     { icon:'🍽', line1:'Meals',    line2:'Logged',   done: _loggedMealCount >= _totalMeals,                               action:"S.tab='log';render()" },
     { icon:'💧', line1:'Water',    line2:(S.day.water||0).toFixed(1)+'L', done: (S.day.water||0)>=2,                      action:"addWater(0.25)" },
-    { icon:'🌾', line1:'Carbs',    line2:'On Track', done: S.day.entries.length>0 && _t.carbs<=_tg.carbs*1.1,            action:"S.tab='log';render()" },
+    { icon:'🌾', line1:'Carbs',    line2:'On Track', done: (S.day.entries||[]).length>0 && _t.carbs<=_tg.carbs*1.1,            action:"S.tab='log';render()" },
     { icon:'⏱', line1:'Fast',     line2:'Active',   done: S.day.fastBest>=19*3600,                                       action:"S.tab='fast';render()" },
     { icon:'🏋', line1:'Workout',  line2:'Done',     done: (S.day.workouts||[]).some(w=>w.type==='circuit'||w.exercises), action:"S.tab='workout';render()" },
     { icon:'⚖️', line1:'Weight',   line2:'Logged',   done: !!S.day.weight,                                                action:"S.tab='today';render();setTimeout(()=>document.getElementById('card-weight')?.scrollIntoView({behavior:'smooth',block:'center'}),50)" },
@@ -4089,6 +4089,10 @@ function tabSettings() {
 
 
 function render() {
+  // Always ensure S.day has safe defaults
+  if(!S.day) S.day = {entries:[],weight:null,water:0,fasting:false,fastStart:null,fastBest:0,fastAccum:0,workouts:[]};
+  if(!Array.isArray(S.day.entries)) S.day.entries = [];
+  if(!Array.isArray(S.day.workouts)) S.day.workouts = [];
 
   // Preserve text input values across re-renders before innerHTML wipe
   const _wdur = document.getElementById('inp-wdur'); if(_wdur) S.wdur = _wdur.value;
