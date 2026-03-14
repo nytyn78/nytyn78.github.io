@@ -3731,57 +3731,93 @@ function movingAvg(hist, n=7) {
 }
 
 function adaptiveTDEE(hist) {
-  // MacroFactor-style adaptive TDEE algorithm
-  // Step 1: Build list of days that have BOTH weight AND calorie data, sorted oldest→newest
-  const days = hist.filter(d => d.weight && d.cal > 0)
-    .slice(0, 60)
-    .reverse(); // oldest first
+  // MacroFactor-style 5-step metabolic engine
 
-  if(days.length < 3) return { tdee: null, confidence: 0, days: days.length };
+  // Step 1 — Collect days with weight, sorted oldest→newest
+  // Use all weight days for trend, but only days with calories for TDEE
+  const allW = hist.filter(d => d.weight).slice(0, 60).reverse();
+  const calDays = hist.filter(d => d.weight && d.cal > 0).slice(0, 60).reverse();
 
-  // Step 2: Compute 7-day EMA of weight to smooth out water fluctuations
-  const EMA_W = 0.25; // smoothing factor for weight (higher = more reactive)
-  const smoothW = [];
-  days.forEach((d, i) => {
-    if(i === 0) { smoothW.push(d.weight); return; }
-    smoothW.push(smoothW[i-1] + EMA_W * (d.weight - smoothW[i-1]));
+  if(allW.length < 3) return { tdee: null, confidence: 0, days: allW.length };
+
+  // Step 2 — Smooth body weight with 7-day simple moving average
+  // Removes water / sodium / glycogen noise
+  const trendWeight = allW.map((d, i) => {
+    const window = allW.slice(Math.max(0, i - 6), i + 1);
+    const avg = window.reduce((s, x) => s + x.weight, 0) / window.length;
+    return { date: d.date, weight: avg };
   });
 
-  // Step 3: For each consecutive pair of smoothed weight days, compute implied TDEE
-  // impliedTDEE = avgIntake - (weightChange * 7700 / dayGap)
-  const impliedTDEEs = [];
-  for(let i = 1; i < days.length; i++) {
-    const d0 = new Date(days[i-1].date), d1 = new Date(days[i].date);
-    const dayGap = Math.max(1, Math.round((d1 - d0) / 86400000));
-    const wChange = smoothW[i] - smoothW[i-1]; // kg (negative = lost)
-    const avgIntake = (days[i-1].cal + days[i].cal) / 2;
-    const kcalFromWeightChange = (wChange * 7700) / dayGap; // kcal/day equivalent
-    const implied = Math.round(avgIntake - kcalFromWeightChange);
-    // Sanity check — humans don't have TDEE below 1000 or above 6000
-    if(implied >= 1000 && implied <= 6000) impliedTDEEs.push(implied);
+  // Step 3 — Regression slope on smoothed weight (kg/day)
+  // Least-squares linear regression gives more stable slope than first/last point
+  const n = trendWeight.length;
+  const t0 = new Date(trendWeight[0].date).getTime();
+  const xs = trendWeight.map(d => (new Date(d.date).getTime() - t0) / 86400000); // days from start
+  const ys = trendWeight.map(d => d.weight);
+  const xMean = xs.reduce((a, b) => a + b, 0) / n;
+  const yMean = ys.reduce((a, b) => a + b, 0) / n;
+  const ssXY = xs.reduce((s, x, i) => s + (x - xMean) * (ys[i] - yMean), 0);
+  const ssXX = xs.reduce((s, x) => s + (x - xMean) ** 2, 0);
+  const slopeKgPerDay = ssXX > 0 ? ssXY / ssXX : 0; // kg/day (negative = losing)
+
+  // Step 4 — Convert slope to energy imbalance per day
+  const energyChangePerDay = slopeKgPerDay * 7700; // kcal/day
+
+  // Step 5 — Maintenance estimate from calorie days
+  // maintenanceEstimate = avgCalories - energyChangePerDay
+  // (if losing weight, energyChangePerDay is negative, so maintenance > intake)
+  if(calDays.length < 3) return { tdee: null, confidence: 0, days: allW.length };
+
+  const avgCal = calDays.reduce((s, d) => s + d.cal, 0) / calDays.length;
+  const rawMaintenance = avgCal - energyChangePerDay;
+
+  // Step 6 — Smooth the maintenance estimate over time using EMA
+  // This is the critical step: TDEE = prevTDEE * 0.9 + newEstimate * 0.1
+  // We simulate this by computing per-week maintenance estimates and smoothing them
+  const weeklyEstimates = [];
+  for(let i = 6; i < calDays.length; i++) {
+    const window = calDays.slice(i - 6, i + 1);
+    const wAvgCal = window.reduce((s, d) => s + d.cal, 0) / window.length;
+    // Get smoothed weight slope for this window
+    const wDates = window.map(d => (new Date(d.date).getTime() - t0) / 86400000);
+    const wWeights = window.map(d => {
+      const tw = trendWeight.find(t => t.date === d.date);
+      return tw ? tw.weight : d.weight;
+    });
+    const wxMean = wDates.reduce((a,b) => a+b, 0) / window.length;
+    const wyMean = wWeights.reduce((a,b) => a+b, 0) / window.length;
+    const wssXY = wDates.reduce((s,x,i) => s + (x-wxMean)*(wWeights[i]-wyMean), 0);
+    const wssXX = wDates.reduce((s,x) => s + (x-wxMean)**2, 0);
+    const wSlope = wssXX > 0 ? wssXY / wssXX : 0;
+    const estimate = Math.round(wAvgCal - wSlope * 7700);
+    if(estimate >= 1000 && estimate <= 6000) weeklyEstimates.push(estimate);
   }
 
-  if(impliedTDEEs.length === 0) return { tdee: null, confidence: 0, days: days.length };
+  // If not enough windowed data, fall back to global estimate
+  const estimates = weeklyEstimates.length >= 1 ? weeklyEstimates : [Math.round(rawMaintenance)];
 
-  // Step 4: Smooth the implied TDEE values using exponential weighted average
-  // Recent values weighted more heavily
-  const EMA_T = 0.3;
-  let smoothedTDEE = impliedTDEEs[0];
-  for(let i = 1; i < impliedTDEEs.length; i++) {
-    smoothedTDEE = smoothedTDEE + EMA_T * (impliedTDEEs[i] - smoothedTDEE);
+  // Apply EMA smoothing: TDEE = prevTDEE * 0.9 + newEstimate * 0.1
+  let smoothedTDEE = estimates[0];
+  for(let i = 1; i < estimates.length; i++) {
+    smoothedTDEE = smoothedTDEE * 0.9 + estimates[i] * 0.1;
   }
 
-  // Step 5: Confidence score based on days of data
-  const confidence = days.length >= 21 ? 3  // high — 3+ weeks
-                   : days.length >= 14 ? 2  // medium — 2 weeks
-                   : days.length >= 7  ? 1  // low — 1 week
-                   : 0;                     // very early
+  // Sanity check
+  if(smoothedTDEE < 1000 || smoothedTDEE > 6000) {
+    smoothedTDEE = Math.round(rawMaintenance);
+  }
+
+  const confidence = allW.length >= 21 ? 3
+                   : allW.length >= 14 ? 2
+                   : allW.length >= 7  ? 1
+                   : 0;
 
   return {
     tdee: Math.round(smoothedTDEE),
+    slopeKgPerWeek: Math.round(slopeKgPerDay * 7 * 100) / 100,
+    avgCal: Math.round(avgCal),
     confidence,
-    days: days.length,
-    impliedValues: impliedTDEEs
+    days: allW.length
   };
 }
 
@@ -3923,6 +3959,7 @@ function renderAdaptiveTDEE(ad) {
     + '<div style="display:flex;align-items:baseline;gap:6px;margin-bottom:6px">'
     + '<div style="font-size:28px;font-weight:700;color:#6A1B9A">' + ad.tdee + '</div>'
     + '<div style="font-size:12px;color:#888">kcal/day · based on ' + ad.days + ' days</div>'
+    + (ad.slopeKgPerWeek !== undefined ? '<div style="font-size:11px;color:#888;margin-top:2px">Regression slope: ' + (ad.slopeKgPerWeek <= 0 ? '' : '+') + ad.slopeKgPerWeek + ' kg/week · avg intake ' + ad.avgCal + ' kcal/day</div>' : '')
     + '</div>'
     + '<div style="font-size:11px;color:#555;line-height:1.5">EMA-smoothed from your actual intake + weight change data. ' + confMsg + '</div>'
     + targetRow
