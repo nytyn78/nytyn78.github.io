@@ -4061,7 +4061,7 @@ function tabHistory() {
   // --- Weight trend chart (14-day) ---
   const wd = histPast(h).filter(x=>x.weight).slice(0,14).reverse();
   let chart = '';
-  if(wd.length >= 2) {
+  if(wd.length >= 1) {
     const vals = wd.map(d=>d.weight);
     const mn = Math.min(...vals)-1, mx = Math.max(...vals)+1;
     const W=400, H=100, xs=W/Math.max(vals.length-1,1);
@@ -4081,12 +4081,15 @@ function tabHistory() {
 
   // --- Macro trend charts (14-day) ---
   const hPast = histPast(h);
-  const macroSection = hPast.length >= 2 ? `<div class="card">
+  // Use full history (including today) for chart display so we show all logged days.
+  // histPast is still used for analytics/metabolic calculations where incomplete today skews results.
+  const hForCharts = h.length > 0 ? h : hPast;
+  const macroSection = hForCharts.length >= 1 ? `<div class="card">
     <div class="sec">📊 Macro Trends (14 days)</div>
-    ${macroChart(hPast, 'protein', '🥩 Protein (g)', '#EF5350', tg.protein)}
-    ${macroChart(hPast, 'carbs',   '🌾 Carbs (g)',   '#FF9800', tg.carbs)}
-    ${macroChart(hPast, 'fat',     '🥑 Fat (g)',     '#AB47BC', tg.fat)}
-    ${macroChart(hPast, 'cal',     '🔥 Calories',    'var(--teal)', tg.cal)}
+    ${macroChart(hForCharts, 'protein', '🥩 Protein (g)', '#EF5350', tg.protein)}
+    ${macroChart(hForCharts, 'carbs',   '🌾 Carbs (g)',   '#FF9800', tg.carbs)}
+    ${macroChart(hForCharts, 'fat',     '🥑 Fat (g)',     '#AB47BC', tg.fat)}
+    ${macroChart(hForCharts, 'cal',     '🔥 Calories',    'var(--teal)', tg.cal)}
   </div>` : '';
 
   // --- AI Weekly Review card ---
@@ -4140,7 +4143,7 @@ function tabHistory() {
   const floatScan = `<button onclick="openBarcodeScanner()" style="position:fixed;bottom:76px;right:16px;width:52px;height:52px;border-radius:50%;background:#E65100;color:#fff;border:none;font-size:22px;box-shadow:0 4px 14px rgba(230,81,0,.5);z-index:999;cursor:pointer;display:flex;align-items:center;justify-content:center" title="Scan barcode">📷</button><button onclick="openFoodCamera()" style="position:fixed;bottom:76px;right:76px;width:52px;height:52px;border-radius:50%;background:#6A1B9A;color:#fff;border:none;font-size:22px;box-shadow:0 4px 14px rgba(106,27,154,.4);z-index:999;cursor:pointer;display:flex;align-items:center;justify-content:center" title="Analyse food photo">🍽</button>`;
   return `<div style="padding:16px 16px 80px">${floatScan}
     ${chart}
-    ${metabolicCard(hPast)}
+    ${metabolicCard(hForCharts)}
     ${macroSection}
     ${aiCard}
     ${measureCard()}
@@ -4152,7 +4155,7 @@ function tabHistory() {
 
 function macroChart(hist, key, label, color, target) {
   const days = hist.slice(0, 14).reverse();
-  if(days.length < 2) return '';
+  if(days.length < 1) return '';
   const vals = days.map(d => Math.round(d[key]||0));
   const mx = Math.max(...vals, target) * 1.15;
   const W = 400, H = 90;
