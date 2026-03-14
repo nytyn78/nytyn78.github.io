@@ -1308,6 +1308,8 @@ const sumMacros = (entries=[]) => entries.reduce((a,e)=>
 const scale = (f,q) => ({protein:+(f.protein*q).toFixed(1),carbs:+(f.carbs*q).toFixed(1),fat:+(f.fat*q).toFixed(1),cal:Math.round(f.cal*q)});
 const hms = s => [Math.floor(s/3600),Math.floor(s%3600/60),s%60].map(v=>String(v).padStart(2,'0')).join(':');
 const isoToday = () => new Date().toISOString().split('T')[0];
+// Filter out today from history arrays used in charts — today's data is incomplete until day ends
+const histPast = (h) => h.filter(d => d.date !== isoToday());
 const isoTomorrow = () => { const d=new Date(); d.setDate(d.getDate()+1); return d.toISOString().split('T')[0]; };
 
 // Swap persistence helpers — saved with date so they expire automatically
@@ -4057,7 +4059,7 @@ function tabHistory() {
   const tg = tgt();
 
   // --- Weight trend chart (14-day) ---
-  const wd = h.filter(x=>x.weight).slice(0,14).reverse();
+  const wd = histPast(h).filter(x=>x.weight).slice(0,14).reverse();
   let chart = '';
   if(wd.length >= 2) {
     const vals = wd.map(d=>d.weight);
@@ -4078,12 +4080,13 @@ function tabHistory() {
   }
 
   // --- Macro trend charts (14-day) ---
-  const macroSection = h.length >= 2 ? `<div class="card">
+  const hPast = histPast(h);
+  const macroSection = hPast.length >= 2 ? `<div class="card">
     <div class="sec">📊 Macro Trends (14 days)</div>
-    ${macroChart(h, 'protein', '🥩 Protein (g)', '#EF5350', tg.protein)}
-    ${macroChart(h, 'carbs',   '🌾 Carbs (g)',   '#FF9800', tg.carbs)}
-    ${macroChart(h, 'fat',     '🥑 Fat (g)',     '#AB47BC', tg.fat)}
-    ${macroChart(h, 'cal',     '🔥 Calories',    'var(--teal)', tg.cal)}
+    ${macroChart(hPast, 'protein', '🥩 Protein (g)', '#EF5350', tg.protein)}
+    ${macroChart(hPast, 'carbs',   '🌾 Carbs (g)',   '#FF9800', tg.carbs)}
+    ${macroChart(hPast, 'fat',     '🥑 Fat (g)',     '#AB47BC', tg.fat)}
+    ${macroChart(hPast, 'cal',     '🔥 Calories',    'var(--teal)', tg.cal)}
   </div>` : '';
 
   // --- AI Weekly Review card ---
@@ -4137,7 +4140,7 @@ function tabHistory() {
   const floatScan = `<button onclick="openBarcodeScanner()" style="position:fixed;bottom:76px;right:16px;width:52px;height:52px;border-radius:50%;background:#E65100;color:#fff;border:none;font-size:22px;box-shadow:0 4px 14px rgba(230,81,0,.5);z-index:999;cursor:pointer;display:flex;align-items:center;justify-content:center" title="Scan barcode">📷</button><button onclick="openFoodCamera()" style="position:fixed;bottom:76px;right:76px;width:52px;height:52px;border-radius:50%;background:#6A1B9A;color:#fff;border:none;font-size:22px;box-shadow:0 4px 14px rgba(106,27,154,.4);z-index:999;cursor:pointer;display:flex;align-items:center;justify-content:center" title="Analyse food photo">🍽</button>`;
   return `<div style="padding:16px 16px 80px">${floatScan}
     ${chart}
-    ${metabolicCard(h)}
+    ${metabolicCard(hPast)}
     ${macroSection}
     ${aiCard}
     ${measureCard()}
