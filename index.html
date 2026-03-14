@@ -1368,7 +1368,17 @@ LS.set('start_weight', 116);
   // Mar 11: 114.1kg — only set weight if not already logged (preserve live data)
   const d11 = '2026-03-11';
   const day11 = LS.get('hlog_'+d11, null) || {};
-  if(!day11.weight) { day11.weight = 114.1; LS.set('hlog_'+d11, day11); }
+  if(!day11.weight) { day11.weight = 114.3; LS.set('hlog_'+d11, day11); }
+  if(!day11.water) { day11.water = 1.75; LS.set('hlog_'+d11, day11); }
+  // Seed Mar 12 and Mar 13 day objects (weight only — no entries recovered)
+  const d12 = '2026-03-12';
+  const day12 = LS.get('hlog_'+d12, null) || {};
+  const restored12 = Object.assign({entries:[],weight:113.7,water:1,fasting:false,fastStart:null,fastBest:0,fastAccum:0,workouts:[]}, day12, {weight:113.7,water:1});
+  LS.set('hlog_'+d12, restored12);
+  const d13 = '2026-03-13';
+  const day13 = LS.get('hlog_'+d13, null) || {};
+  const restored13 = Object.assign({entries:[],weight:113.4,water:2,fasting:false,fastStart:null,fastBest:0,fastAccum:0,workouts:[]}, day13, {weight:113.4,water:2});
+  LS.set('hlog_'+d13, restored13);
   // Always ensure hlog_history has correct macro rows for Mar 9 & 10
   // (these days have no entries[] so history is the only source of truth for macros)
   const hist = LS.get('hlog_history', []);
@@ -1377,8 +1387,11 @@ LS.set('start_weight', 116);
     const entry = {date, cal, protein, carbs, fat, weight, water, workoutDone};
     if(i>=0) hist[i] = entry; else hist.unshift(entry);
   };
-  upsert('2026-03-09', 1317, 107, 19, 92, 115.8, 4, true);
-  upsert('2026-03-10', 927,  73,  13, 68, 115.3, 2, false);
+  upsert('2026-03-09', 1317, 107, 19, 92,  115.8, 4,    true);
+  upsert('2026-03-10', 927,  73,  13, 68,  115.3, 2,    false);
+  upsert('2026-03-11', 1312, 78.1,26.1,73.5,114.3, 1.75, false);
+  upsert('2026-03-12', 1368, 101.3,21, 99.5,113.7, 1,    false);
+  upsert('2026-03-13', 711,  42,  13, 55,  113.4, 2,    false);
   hist.sort((a,b)=>b.date.localeCompare(a.date));
   LS.set('hlog_history', hist);
 })();
