@@ -5072,7 +5072,9 @@ if(LS.get('notif_enabled', false) && typeof Notification !== 'undefined' && Noti
 }
 
 // --- SERVICE WORKER --------------------------------------------------
-const REQUIRED_SW_VERSION = 'health-tracker-v2.28';
+// SW version check — uses the SW's own reported version as the source of truth
+// No hardcoded version needed; mismatch only triggers reload on genuine updates
+let _swVersion = null;
 if('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/service-worker.js').then(reg => {
     // Poll for a new service worker installing or waiting
@@ -5097,11 +5099,9 @@ if('serviceWorker' in navigator) {
   }).catch(()=>{});
   // Listen for version reply from SW
   navigator.serviceWorker.addEventListener('message', e => {
-    if(e.data && e.data.type === 'SW_VERSION' && e.data.version !== REQUIRED_SW_VERSION) {
-      // Wrong version active — force unregister and reload to get fresh SW
-      navigator.serviceWorker.getRegistration().then(reg => {
-        if(reg) reg.unregister().then(() => window.location.reload());
-      });
+    if(e.data && e.data.type === 'SW_VERSION') {
+      // Just store the version — no mismatch reload needed
+      _swVersion = e.data.version;
     }
     if(e.data && e.data.type === 'SW_UPDATED') {
       window.location.reload();
