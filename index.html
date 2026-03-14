@@ -1349,7 +1349,7 @@ const LS = {
 // Undo state
 let _undoEntry = null;
 let _undoTimer = null;
-const APP_VERSION = 'v2.26 · 14-Mar-2026';
+const APP_VERSION = 'v2.28 · 14-Mar-2026';
 // One-time fix: reset corrupt start_weight
 LS.set('start_weight', 116);
 // Permanent seed: Mar 9-11 baseline data. No one-time flag — runs every load.
@@ -5036,8 +5036,41 @@ if(LS.get('notif_enabled', false) && typeof Notification !== 'undefined' && Noti
 }
 
 // --- SERVICE WORKER --------------------------------------------------
+const REQUIRED_SW_VERSION = 'health-tracker-v2.28';
 if('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/service-worker.js').catch(()=>{});
+  navigator.serviceWorker.register('/service-worker.js').then(reg => {
+    // Poll for a new service worker installing or waiting
+    reg.addEventListener('updatefound', () => {
+      const newWorker = reg.installing;
+      newWorker.addEventListener('statechange', () => {
+        if(newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+          // New SW installed and waiting — force immediate takeover
+          newWorker.postMessage({ type: 'SKIP_WAITING' });
+        }
+      });
+    });
+    // When the new SW takes control, reload once
+    let refreshing = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if(!refreshing) { refreshing = true; window.location.reload(); }
+    });
+    // Also check if current active cache is outdated by asking the SW
+    if(reg.active) {
+      reg.active.postMessage({ type: 'GET_VERSION' });
+    }
+  }).catch(()=>{});
+  // Listen for version reply from SW
+  navigator.serviceWorker.addEventListener('message', e => {
+    if(e.data && e.data.type === 'SW_VERSION' && e.data.version !== REQUIRED_SW_VERSION) {
+      // Wrong version active — force unregister and reload to get fresh SW
+      navigator.serviceWorker.getRegistration().then(reg => {
+        if(reg) reg.unregister().then(() => window.location.reload());
+      });
+    }
+    if(e.data && e.data.type === 'SW_UPDATED') {
+      window.location.reload();
+    }
+  });
 }
 
 if(S.day.fasting && S.day.fastStart) {
