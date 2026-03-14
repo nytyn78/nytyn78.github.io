@@ -1459,6 +1459,7 @@ LS.set('start_weight', 116);
 })();
 
 
+const blankDay = () => ({ entries:[], weight:null, water:0, fasting:false, fastStart:null, fastBest:0, fastAccum:0, workouts:[], meds:{} });
 const safeDay = (d) => { d.entries=d.entries||[]; d.workouts=d.workouts||[]; return d; };
 const loadDay = d => LS.get('hlog_'+d,null) || blankDay();
 const saveDay = (d,v) => LS.set('hlog_'+d,v);
@@ -5146,16 +5147,25 @@ if('serviceWorker' in navigator) {
   });
 }
 
-if(S.day.fasting && S.day.fastStart) {
-  S.fastElapsed = Math.floor((Date.now()-S.day.fastStart)/1000);
-  startTimer();
-} else {
-  S.fastElapsed = 0;
-}
 try {
+  if(S.day.fasting && S.day.fastStart) {
+    S.fastElapsed = Math.floor((Date.now()-S.day.fastStart)/1000);
+    startTimer();
+  } else {
+    S.fastElapsed = 0;
+  }
   render();
 } catch(e) {
-  document.getElementById('app').innerHTML = '<div style="padding:20px;font-family:Georgia,serif;color:#c00"><b>Error loading app:</b><br/>' + e.message + '<br/><pre style="font-size:11px;margin-top:10px;white-space:pre-wrap">' + e.stack + '</pre></div>';
+  document.getElementById('app').innerHTML =
+    '<div style="padding:24px;font-family:Georgia,serif;background:#fff;min-height:100vh;color:#c00">' +
+    '<div style="font-size:16px;font-weight:700;margin-bottom:12px">⚠️ App Error</div>' +
+    '<div style="font-size:13px;color:#333;margin-bottom:8px">Please screenshot this and send to developer:</div>' +
+    '<div style="background:#f5f5f5;padding:12px;border-radius:8px;font-size:12px;color:#c00;word-break:break-all;white-space:pre-wrap">' +
+    (e.message||'Unknown error') + '\n\n' + (e.stack||'') +
+    '</div>' +
+    '<button onclick="localStorage.clear();location.reload()" style="margin-top:16px;padding:12px 20px;background:#c00;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;width:100%">Clear Data &amp; Restart</button>' +
+    '<div style="font-size:11px;color:#888;margin-top:8px;text-align:center">Note: This will clear local app data but Firebase backup is safe</div>' +
+    '</div>';
 }
 </script>
   <!-- Undo bar -->
