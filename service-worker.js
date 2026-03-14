@@ -1,4 +1,4 @@
-const CACHE = 'health-tracker-v2.28';
+const CACHE = 'health-tracker-v2.29b';
 const ASSETS = ['/', '/index.html', '/manifest.json', '/foods.json', '/icon-192.png', '/icon-512.png'];
 
 self.addEventListener('install', e => {

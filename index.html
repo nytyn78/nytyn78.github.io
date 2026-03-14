@@ -1349,7 +1349,7 @@ const LS = {
 // Undo state
 let _undoEntry = null;
 let _undoTimer = null;
-const APP_VERSION = 'v2.28 · 14-Mar-2026';
+const APP_VERSION = 'v2.29 · 14-Mar-2026';
 // One-time fix: reset corrupt start_weight
 LS.set('start_weight', 116);
 // Permanent seed: Mar 9-11 baseline data. No one-time flag — runs every load.
@@ -2157,10 +2157,43 @@ function checkMorningWeightPrompt() {
     }
   }, 800);
 }
+function rebuildHistory() {
+  const prefix = 'hlog_';
+  const entries = [];
+  for(let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if(!key.startsWith(prefix)) continue;
+    const date = key.slice(prefix.length);
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(date)) continue;
+    const day = LS.get(key, null);
+    if(!day) continue;
+    const t = sumMacros(day.entries || []);
+    entries.push({
+      date,
+      cal:         Math.round(t.cal     || 0),
+      protein:     Math.round(t.protein || 0),
+      carbs:       Math.round(t.carbs   || 0),
+      fat:         Math.round(t.fat     || 0),
+      weight:      day.weight  || null,
+      water:       day.water   || 0,
+      workoutDone: (day.workouts || []).length > 0,
+      fastBest:    day.fastBest  || 0,
+      fastAccum:   day.fastAccum || 0
+    });
+  }
+  entries.sort((a, b) => b.date.localeCompare(a.date));
+  const trimmed = entries.slice(0, 90);
+  LS.set('hlog_history', trimmed);
+  S.hist = trimmed;
+  if(fbDb && fbUser) fbPush();
+  alert('✅ History rebuilt — ' + trimmed.length + ' days found. Reloading...');
+  location.reload();
+}
+
 function persist() {
   saveDay(S.date, S.day);
   const t=tots();
-  const entry={date:S.date,...t,weight:S.day.weight,water:S.day.water,workoutDone:(S.day.workouts||[]).length>0};
+  const entry={date:S.date,...t,weight:S.day.weight,water:S.day.water,workoutDone:(S.day.workouts||[]).length>0,fastBest:S.day.fastBest||0,fastAccum:S.day.fastAccum||0};
   const h=LS.get('hlog_history',[]);
   const i=h.findIndex(x=>x.date===S.date);
   if(i>=0) h[i]=entry; else h.unshift(entry);
@@ -4855,6 +4888,9 @@ function tabSettings() {
     </div>
 
     <div class="card" style="background:#FFF8E1;border:1px solid #FFE082">
+      <div style="font-size:13px;font-weight:700;color:var(--teal);margin-bottom:8px">🔧 Data Tools</div>
+      <div style="font-size:12px;color:#888;margin-bottom:10px">If history charts are missing days, rebuild the history index from your saved daily logs.</div>
+      <button onclick="rebuildHistory()" style="width:100%;padding:10px;background:var(--lt-teal);color:var(--teal);border:1.5px solid var(--teal);border-radius:10px;font-size:13px;font-weight:700;margin-bottom:14px">🔄 Rebuild History Index</button>
       <div style="font-size:13px;font-weight:700;color:var(--gold);margin-bottom:8px">⚠️ Danger Zone</div>
       <div style="font-size:12px;color:#888;margin-bottom:12px">Clear all local data from this device. Cloud backup (if connected) is unaffected.</div>
       <button onclick="if(confirm('Clear ALL local data? This cannot be undone.')){localStorage.clear();location.reload();}" style="width:100%;padding:10px;background:#FFEBEE;color:var(--red);border:1px solid #EF9A9A;border-radius:10px;font-size:13px;font-weight:700">Clear Local Data</button>
