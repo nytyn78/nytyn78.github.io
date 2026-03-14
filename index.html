@@ -11,152 +11,306 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-:root{
-  --teal:#00695C;--lt-teal:#E0F2F1;--gold:#F57F17;--lt-gold:#FFF8E1;
-  --dark:#1A1A2E;--red:#E53935;--green:#388E3C;--bg:#F4F7F6;
-  --font:Georgia,"Times New Roman",serif;--mono:"Courier New",monospace;
-  --shadow:0 2px 14px rgba(0,0,0,0.07);--radius:16px;
+/* ============================================================
+   NYTYN HEALTH TRACKER — STYLESHEET
+   Sections:
+   1. Reset & CSS Variables
+   2. Base Elements
+   3. Layout & Structure
+   4. Components (Cards, Inputs, Tabs, Buttons)
+   5. Feature-specific (Meals, Exercises, Rings, Charts)
+   6. Overlays & Modals (Barcode, Food Camera)
+   7. Animations & Keyframes
+   8. Dark Mode
+   ============================================================ */
+
+/* ── 1. RESET & CSS VARIABLES ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
 }
-body{background:var(--bg);font-family:var(--font);max-width:480px;margin:0 auto;min-height:100vh;overflow-x:hidden}
-button{font-family:var(--font);cursor:pointer}
-input{font-family:var(--font);outline:none}
-.card{background:#fff;border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin-bottom:14px}
-.inp{padding:9px 13px;border:1.5px solid #DDD;border-radius:10px;font-size:14px;width:100%;transition:border .2s;background:#fff}
-.inp:focus{border-color:var(--teal)}
-.sec{font-size:14px;font-weight:700;color:var(--teal);margin-bottom:12px}
 
-.tabs{display:flex;gap:4px;padding:10px 12px;background:#fff;border-bottom:1px solid #EEE;overflow-x:auto;position:sticky;top:0;z-index:100}
-.tab{padding:7px 13px;border-radius:20px;border:none;font-size:12px;white-space:nowrap;font-family:var(--font);transition:all .2s}
-.tab.on{background:var(--teal);color:#fff;font-weight:700}
-.tab:not(.on){background:transparent;color:#666}
-.stab{padding:6px 13px;border-radius:14px;border:none;font-size:12px;font-family:var(--font);transition:all .2s}
-.stab.on{background:var(--dark);color:#fff;font-weight:700}
-.stab:not(.on){background:#F0F0F0;color:#666}
-  .card{animation:fadeUp .18s ease both}
-  @keyframes fadeUp{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
-  
-  
-  
-  
-.hdr{background:linear-gradient(135deg,var(--dark) 0%,var(--teal) 100%);padding:22px 18px 18px;color:#fff}
-.content{padding:14px 14px 90px}
-.meal-hdr{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;cursor:pointer;border:1.5px solid #E8F0EE;background:#F8FFFE;margin-bottom:0}
-.meal-hdr
-.meal-detail{padding:12px 14px;background:#FAFFFE;border:1.5px solid var(--teal);border-top:none;border-radius:0 0 10px 10px;margin-bottom:6px}
-.excard{padding:12px 14px;border-radius:12px;margin-bottom:8px;border:1px solid #EEE;background:#fff;cursor:pointer;user-select:none;transition:all .2s}
-.excard
-.excard
-.ring{display:flex;flex-direction:column;align-items:center;gap:3px}
-.chk{width:22px;height:22px;border-radius:50%;border:2px solid #DDD;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:8px;transition:all .2s}
-.chk.on{border-color:var(--green);background:var(--green)}
-.fade{animation:fi .3s ease}
-@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-::-webkit-scrollbar{width:0;height:0}
+:root {
+  --teal: #00695C;
+  --lt-teal: #E0F2F1;
+  --gold: #F57F17;
+  --lt-gold: #FFF8E1;
+  --dark: #1A1A2E;
+  --red: #E53935;
+  --green: #388E3C;
+  --bg: #F4F7F6;
+  --muted: #888;
+  --ring-bg: #E0E0E0;
+  --font: Georgia, "Times New Roman", serif;
+  --mono: "Courier New", monospace;
+  --shadow: 0 2px 14px rgba(0,0,0,0.07);
+  --radius: 16px;
+}
 
+/* ── 2. BASE ELEMENTS ── */
+body {
+  background: var(--bg);
+  font-family: var(--font);
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+button { font-family: var(--font); cursor: pointer; }
+input  { font-family: var(--font); outline: none; }
+::-webkit-scrollbar { width: 0; height: 0; }
+
+/* ── 3. LAYOUT & STRUCTURE ── */
+.hdr {
+  background: linear-gradient(135deg, var(--dark) 0%, var(--teal) 100%);
+  padding: 22px 18px 18px;
+  color: #fff;
+}
+.content { padding: 14px 14px 90px; }
+
+/* ── 4. COMPONENTS ── */
+
+/* Cards */
+.card {
+  background: #fff;
+  border-radius: var(--radius);
+  padding: 18px;
+  box-shadow: var(--shadow);
+  margin-bottom: 14px;
+  animation: fadeUp .18s ease both;
+}
+
+/* Section heading */
+.sec { font-size: 14px; font-weight: 700; color: var(--teal); margin-bottom: 12px; }
+
+/* Inputs */
+.inp {
+  padding: 9px 13px;
+  border: 1.5px solid #DDD;
+  border-radius: 10px;
+  font-size: 14px;
+  width: 100%;
+  transition: border .2s;
+  background: #fff;
+}
+.inp:focus { border-color: var(--teal); }
+
+/* Tabs — top nav */
+.tabs {
+  display: flex;
+  gap: 4px;
+  padding: 10px 12px;
+  background: #fff;
+  border-bottom: 1px solid #EEE;
+  overflow-x: auto;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.tab {
+  padding: 7px 13px;
+  border-radius: 20px;
+  border: none;
+  font-size: 12px;
+  white-space: nowrap;
+  font-family: var(--font);
+  transition: all .2s;
+}
+.tab.on  { background: var(--teal); color: #fff; font-weight: 700; }
+.tab:not(.on) { background: transparent; color: #666; }
+
+/* Sub-tabs */
+.stab { padding: 6px 13px; border-radius: 14px; border: none; font-size: 12px; font-family: var(--font); transition: all .2s; }
+.stab.on     { background: var(--dark); color: #fff; font-weight: 700; }
+.stab:not(.on) { background: #F0F0F0; color: #666; }
+
+/* Checkmark circle */
+.chk {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  border: 2px solid #DDD;
+  background: #fff;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  margin-left: 8px;
+  transition: all .2s;
+}
+.chk.on { border-color: var(--green); background: var(--green); }
+
+/* Badges */
+.badge-green { background: #E8F5E9; color: var(--green); }
+.badge-red   { background: #FFEBEE; color: var(--red); }
+.badge-gold  { background: var(--lt-gold); color: var(--gold); }
+.badge-teal  { background: var(--lt-teal); color: var(--teal); }
+
+/* ── 5. FEATURE-SPECIFIC ── */
+
+/* Macro rings */
+.ring { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+
+/* Meal rows */
+.meal-hdr {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  border: 1.5px solid #E8F0EE;
+  background: #F8FFFE;
+  margin-bottom: 0;
+}
+.meal-hdr.open { background: var(--lt-teal); border-color: var(--teal); }
+.meal-detail {
+  padding: 12px 14px;
+  background: #FAFFFE;
+  border: 1.5px solid var(--teal);
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+  margin-bottom: 6px;
+}
+
+/* Exercise cards */
+.excard {
+  padding: 12px 14px;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  border: 1px solid #EEE;
+  background: #fff;
+  cursor: pointer;
+  user-select: none;
+  transition: all .2s;
+}
+.excard.done   { background: #E8F5E9; border-color: var(--green); }
+.excard.locked { background: #F9F9F9; opacity: .6; cursor: not-allowed; }
+
+/* Srow (settings rows) */
+.srow { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #F5F5F5; }
+
+/* ── 6. OVERLAYS & MODALS ── */
+
+/* Barcode scanner */
+#barcode-overlay {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: #000;
+  z-index: 9998;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+#barcode-overlay video  { width: 100%; max-width: 480px; border-radius: 12px; }
+#barcode-overlay canvas { display: none; }
+
+.scan-frame {
+  position: absolute;
+  width: 240px; height: 160px;
+  border: 3px solid var(--teal);
+  border-radius: 12px;
+  box-shadow: 0 0 0 9999px rgba(0,0,0,.55);
+}
+.scan-line {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--teal);
+  animation: scanline 2s linear infinite;
+}
+
+/* ── 7. ANIMATIONS ── */
+@keyframes fadeUp  { from { opacity:0; transform:translateY(5px) } to { opacity:1; transform:translateY(0) } }
+@keyframes fi      { from { opacity:0; transform:translateY(6px) } to { opacity:1; transform:none } }
+@keyframes spin    { from { transform:rotate(0deg) } to { transform:rotate(360deg) } }
+@keyframes scanline { 0% { top:0 } 100% { top:100% } }
+
+.fade { animation: fi .3s ease; }
+
+/* ── 8. DARK MODE ── */
 @media (prefers-color-scheme: dark) {
   :root {
-    --teal:#26A69A;--lt-teal:#1A3D3A;--gold:#FFB300;--lt-gold:#2D2200;
-    --dark:#E8EAF6;--red:#EF5350;--green:#66BB6A;--bg:#0F0F0F;
-    --shadow:0 2px 14px rgba(0,0,0,0.4);
+    --teal: #26A69A;
+    --lt-teal: #1A3D3A;
+    --gold: #FFB300;
+    --lt-gold: #2D2200;
+    --dark: #E8EAF6;
+    --red: #EF5350;
+    --green: #66BB6A;
+    --bg: #0F0F0F;
+    --ring-bg: #333;
+    --shadow: 0 2px 14px rgba(0,0,0,0.4);
   }
-  body { background:var(--bg); color:#E0E0E0; }
-  .card { background:#1E1E1E; color:#E0E0E0; }
-  .inp { background:#2A2A2A; border-color:#444; color:#E0E0E0; }
-  .inp:focus { border-color:var(--teal); }
-  .inp::placeholder { color:#666; }
-  .tabs { background:#1A1A1A; border-bottom-color:#333; }
-  .tab:not(.on) { color:#999; }
-  .stab:not(.on) { background:#2A2A2A; color:#999; }
-  .srow { border-bottom-color:#2A2A2A; }
-  .meal-hdr { background:#252525; border-color:#333; }
-  .meal-hdr.open { background:var(--lt-teal); border-color:var(--teal); }
-  .meal-detail { background:#1A2E2B; border-color:var(--teal); }
-  .excard { background:#1E1E1E; border-color:#333; }
-  .excard.done { background:#1A3320; border-color:#388E3C; }
-  .excard.locked { background:#181818; }
-  .chk { background:#2A2A2A; border-color:#444; }
-  .badge-green { background:#1A3320; color:#66BB6A; }
-  .badge-red   { background:#2D1515; color:#EF5350; }
-  .badge-gold  { background:#2D2200; color:#FFB300; }
-  .badge-teal  { background:var(--lt-teal); color:var(--teal); }
 
-  /* Cards with inline background:#fff or #FAFAFA → override */
+  body   { background: var(--bg); color: #E0E0E0; }
+  .card  { background: #1E1E1E; color: #E0E0E0; }
+  .inp   { background: #2A2A2A; border-color: #444; color: #E0E0E0; }
+  .inp:focus { border-color: var(--teal); }
+  .inp::placeholder { color: #666; }
+  .tabs  { background: #1A1A1A; border-bottom-color: #333; }
+  .tab:not(.on)  { color: #999; }
+  .stab:not(.on) { background: #2A2A2A; color: #999; }
+  .srow  { border-bottom-color: #2A2A2A; }
+  .meal-hdr  { background: #252525; border-color: #333; }
+  .meal-hdr.open { background: var(--lt-teal); border-color: var(--teal); }
+  .meal-detail   { background: #1A2E2B; border-color: var(--teal); }
+  .excard        { background: #1E1E1E; border-color: #333; }
+  .excard.done   { background: #1A3320; border-color: #388E3C; }
+  .excard.locked { background: #181818; }
+  .chk   { background: #2A2A2A; border-color: #444; }
+  .badge-green { background: #1A3320; color: #66BB6A; }
+  .badge-red   { background: #2D1515; color: #EF5350; }
+  .badge-gold  { background: #2D2200; color: #FFB300; }
+  .badge-teal  { background: var(--lt-teal); color: var(--teal); }
+
+  /* SVG chart text */
+  svg text { fill: #AAA !important; }
+
+  /* Nav bar */
+  .nav { background: #1A1A1A !important; border-top-color: #333 !important; }
+  .nav button     { color: #888 !important; }
+  .nav button.on  { color: var(--teal) !important; }
+
+  /* Overlays */
+  #circuit-overlay { background: #0F0F0F !important; }
+  #undo-bar        { background: #333 !important; }
+  .hdr { background: linear-gradient(135deg, #0A0A1A 0%, #00695C 100%) !important; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar       { width: 4px; }
+  ::-webkit-scrollbar-track { background: #1A1A1A; }
+  ::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
+
+  /* Inline background overrides */
   [style*="background:#fff"],[style*="background: #fff"],
   [style*="background:#FAFAFA"],[style*="background:#F5F5F5"],
   [style*="background:#F9F9F9"],[style*="background:#FAFFFE"],
-  [style*="background:#F8FFFE"] { background:#252525 !important; }
-  [style*="background:#F0F0F0"] { background:#2A2A2A !important; }
-  [style*="background:#F4F7F6"] { background:#0F0F0F !important; }
+  [style*="background:#F8FFFE"]  { background: #252525 !important; }
+  [style*="background:#F0F0F0"]  { background: #2A2A2A !important; }
+  [style*="background:#F4F7F6"]  { background: #0F0F0F !important; }
+  [style*="background:#E8F5E9"]  { background: #1A3320 !important; }
+  [style*="background:#FFEBEE"]  { background: #2D1515 !important; }
+  [style*="background:#FFF8E1"]  { background: #2D2200 !important; }
+  [style*="background:#E3F2FD"]  { background: #0D2033 !important; }
+  [style*="background:#EDE7F6"]  { background: #1E1528 !important; }
+  [style*="background:#F0FAF8"]  { background: #0D2520 !important; }
+  [style*="background:#FFF8E1;border:1px solid #FFE082"] { background: #2D2200 !important; border-color: #664400 !important; }
+  [style*="background:#FFEBEE;border:1px solid #EF9A9A"] { background: #2D1515 !important; border-color: #661515 !important; }
+  [style*="background:linear-gradient(135deg,#E8F5E9"]   { background: linear-gradient(135deg,#1A3320,#1E3A20) !important; border-color: var(--green) !important; }
+  [style*="background:#F0F0F0;border-radius:20px"] { background: #2A2A2A !important; }
+  [style*="background:#F0F0F0;border-radius:10px"] { background: #2A2A2A !important; }
 
-  /* Light pastel backgrounds → dark equivalents */
-  [style*="background:#E8F5E9"] { background:#1A3320 !important; }
-  [style*="background:#FFEBEE"] { background:#2D1515 !important; }
-  [style*="background:#FFF8E1"] { background:#2D2200 !important; }
-  [style*="background:#E3F2FD"] { background:#0D2033 !important; }
-  [style*="background:#EDE7F6"] { background:#1E1528 !important; }
-  [style*="background:#F0FAF8"] { background:#0D2520 !important; }
-
-  /* Text colours */
+  /* Inline text colour overrides */
   [style*="color:#555"],[style*="color: #555"],
-  [style*="color:#666"],[style*="color: #666"] { color:#AAA !important; }
-  [style*="color:#888"],[style*="color: #888"] { color:#888 !important; }
-  [style*="color:#333"],[style*="color: #333"] { color:#CCC !important; }
-  [style*="color:var(--dark)"] { color:#E8EAF6 !important; }
+  [style*="color:#666"],[style*="color: #666"] { color: #AAA !important; }
+  [style*="color:#888"],[style*="color: #888"] { color: #888 !important; }
+  [style*="color:#333"],[style*="color: #333"] { color: #CCC !important; }
+  [style*="color:var(--dark)"]                 { color: #E8EAF6 !important; }
 
-  /* Border colours */
-  [style*="border-bottom:1px solid #F5F5F5"] { border-bottom-color:#2A2A2A !important; }
-  [style*="border-bottom:1px solid #EEE"] { border-bottom-color:#333 !important; }
-  [style*="border:1px solid #EEE"] { border-color:#333 !important; }
-  [style*="border:1.5px solid #E8F0EE"] { border-color:#333 !important; }
-  [style*="border:1px solid #DDD"] { border-color:#444 !important; }
+  /* Inline border overrides */
+  [style*="border-bottom:1px solid #F5F5F5"] { border-bottom-color: #2A2A2A !important; }
+  [style*="border-bottom:1px solid #EEE"]    { border-bottom-color: #333 !important; }
+  [style*="border:1px solid #EEE"]           { border-color: #333 !important; }
+  [style*="border:1.5px solid #E8F0EE"]      { border-color: #333 !important; }
+  [style*="border:1px solid #DDD"]           { border-color: #444 !important; }
 
-  /* Undo bar */
-  #undo-bar { background:#333 !important; }
-
-  /* Input number spinners */
+  /* Misc */
   input[type="number"] { color-scheme: dark; }
-}
-
-@media (prefers-color-scheme: dark) {
-  /* SVG chart text */
-  svg text { fill:#AAA !important; }
-
-  /* Tab bar bottom nav */
-  .nav { background:#1A1A1A !important; border-top-color:#333 !important; }
-  .nav button { color:#888 !important; }
-  .nav button.on { color:var(--teal) !important; }
-
-  /* Circuit timer overlay */
-  #circuit-overlay { background:#0F0F0F !important; }
-
-  /* Scrollbar */
-  ::-webkit-scrollbar { width:4px; }
-  ::-webkit-scrollbar-track { background:#1A1A1A; }
-  ::-webkit-scrollbar-thumb { background:#444; border-radius:4px; }
-
-  /* Video barcode scanner overlay stays dark naturally */
-  #barcode-overlay { position:fixed;top:0;left:0;right:0;bottom:0;background:#000;z-index:9998;display:flex;flex-direction:column;align-items:center;justify-content:center; }
-  #barcode-overlay video { width:100%;max-width:480px;border-radius:12px; }
-  #barcode-overlay canvas { display:none; }
-  .scan-frame { position:absolute;width:240px;height:160px;border:3px solid var(--teal);border-radius:12px;box-shadow:0 0 0 9999px rgba(0,0,0,.55); }
-  .scan-line { position:absolute;top:0;left:0;right:0;height:2px;background:var(--teal);animation:scanline 2s linear infinite; }
-  @keyframes scanline { 0%{top:0} 100%{top:100%} }
-
-  /* White text on dark teal header — stays as-is, already works */
-  .hdr { background:linear-gradient(135deg,#0A0A1A 0%,#00695C 100%) !important; }
-
-  /* Danger zone card */
-  [style*="background:#FFF8E1;border:1px solid #FFE082"] { background:#2D2200 !important; border-color:#664400 !important; }
-  [style*="background:#FFEBEE;border:1px solid #EF9A9A"] { background:#2D1515 !important; border-color:#661515 !important; }
-
-  /* Day complete celebration */
-  [style*="background:linear-gradient(135deg,#E8F5E9"] { background:linear-gradient(135deg,#1A3320,#1E3A20) !important; border-color:var(--green) !important; }
-
-  /* Goal progress bar track */
-  [style*="background:#F0F0F0;border-radius:20px"] { background:#2A2A2A !important; }
-  [style*="background:#F0F0F0;border-radius:10px"] { background:#2A2A2A !important; }
 }
 </style>
 </head>
@@ -1193,7 +1347,7 @@ const LS = {
 // Undo state
 let _undoEntry = null;
 let _undoTimer = null;
-const APP_VERSION = 'v2.24 · 13-Mar-2026';
+const APP_VERSION = 'v2.26 · 14-Mar-2026';
 // One-time fix: reset corrupt start_weight
 LS.set('start_weight', 116);
 // One-time fix: restore Mar 9-11 logs from screenshot data
@@ -2431,6 +2585,24 @@ function ExCard(ex,done,phwk) {
 }
 
 // --- TAB: TODAY ------------------------------------------------------
+function renderProteinWarning(eaten, target) {
+  const pct = Math.round(eaten / target * 100);
+  const remaining = Math.round(target - eaten);
+  const hr = new Date().getHours();
+  if (pct >= 80 || hr < 15) return '';
+  const color = pct < 40 ? '#C62828' : '#E65100';
+  const bg    = pct < 40 ? '#FFEBEE' : '#FFF3E0';
+  const icon  = pct < 40 ? '🚨' : '⚠️';
+  const msg   = pct < 40
+    ? 'Only ' + eaten + 'g protein so far — you need ' + remaining + 'g more today. Without enough protein, your body will break down muscle instead of fat.'
+    : eaten + 'g protein so far — ' + remaining + 'g still needed. Add eggs, paneer or whey shake to hit your target.';
+  return '<div style="background:' + bg + ';border-left:4px solid ' + color + ';border-radius:10px;padding:12px 14px;margin-bottom:4px">'
+    + '<div style="font-size:13px;font-weight:700;color:' + color + ';margin-bottom:4px">' + icon + ' Protein ' + pct + '% of target</div>'
+    + '<div style="font-size:12px;color:#555;line-height:1.5">' + msg + '</div>'
+    + '<button onclick="S.tab=\'log\';render()" style="margin-top:8px;padding:6px 14px;background:' + color + ';color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700">+ Log Protein Food</button>'
+    + '</div>';
+}
+
 function tabToday() {
   const tp = todayPlan(), ts = todaySched();
   const t = tots(), tg = tgt();
@@ -2565,6 +2737,8 @@ function tabToday() {
         ${bar(t.protein, tg.protein, 'var(--teal)', '💪 Protein')}
       </div>
     </div>
+
+    ${renderProteinWarning(t.protein, tg.protein)}
 
     <div class="card">
       <div class="sec" style="margin-bottom:4px">🍽 Meal 1 · 2:00 PM</div>
@@ -3556,6 +3730,61 @@ function movingAvg(hist, n=7) {
   });
 }
 
+function adaptiveTDEE(hist) {
+  // MacroFactor-style adaptive TDEE algorithm
+  // Step 1: Build list of days that have BOTH weight AND calorie data, sorted oldest→newest
+  const days = hist.filter(d => d.weight && d.cal > 0)
+    .slice(0, 60)
+    .reverse(); // oldest first
+
+  if(days.length < 3) return { tdee: null, confidence: 0, days: days.length };
+
+  // Step 2: Compute 7-day EMA of weight to smooth out water fluctuations
+  const EMA_W = 0.25; // smoothing factor for weight (higher = more reactive)
+  const smoothW = [];
+  days.forEach((d, i) => {
+    if(i === 0) { smoothW.push(d.weight); return; }
+    smoothW.push(smoothW[i-1] + EMA_W * (d.weight - smoothW[i-1]));
+  });
+
+  // Step 3: For each consecutive pair of smoothed weight days, compute implied TDEE
+  // impliedTDEE = avgIntake - (weightChange * 7700 / dayGap)
+  const impliedTDEEs = [];
+  for(let i = 1; i < days.length; i++) {
+    const d0 = new Date(days[i-1].date), d1 = new Date(days[i].date);
+    const dayGap = Math.max(1, Math.round((d1 - d0) / 86400000));
+    const wChange = smoothW[i] - smoothW[i-1]; // kg (negative = lost)
+    const avgIntake = (days[i-1].cal + days[i].cal) / 2;
+    const kcalFromWeightChange = (wChange * 7700) / dayGap; // kcal/day equivalent
+    const implied = Math.round(avgIntake - kcalFromWeightChange);
+    // Sanity check — humans don't have TDEE below 1000 or above 6000
+    if(implied >= 1000 && implied <= 6000) impliedTDEEs.push(implied);
+  }
+
+  if(impliedTDEEs.length === 0) return { tdee: null, confidence: 0, days: days.length };
+
+  // Step 4: Smooth the implied TDEE values using exponential weighted average
+  // Recent values weighted more heavily
+  const EMA_T = 0.3;
+  let smoothedTDEE = impliedTDEEs[0];
+  for(let i = 1; i < impliedTDEEs.length; i++) {
+    smoothedTDEE = smoothedTDEE + EMA_T * (impliedTDEEs[i] - smoothedTDEE);
+  }
+
+  // Step 5: Confidence score based on days of data
+  const confidence = days.length >= 21 ? 3  // high — 3+ weeks
+                   : days.length >= 14 ? 2  // medium — 2 weeks
+                   : days.length >= 7  ? 1  // low — 1 week
+                   : 0;                     // very early
+
+  return {
+    tdee: Math.round(smoothedTDEE),
+    confidence,
+    days: days.length,
+    impliedValues: impliedTDEEs
+  };
+}
+
 function analyticsData(hist) {
   // Compute all metabolic analytics from history
   const wData = hist.filter(d => d.weight).slice(0, 30).reverse(); // oldest→newest
@@ -3568,19 +3797,22 @@ function analyticsData(hist) {
   const lastDate = new Date(wData[wData.length-1].date);
   const daySpan = Math.max(1, Math.round((lastDate - firstDate) / (1000*60*60*24)));
   const totalLost = oldest - latest;
-  const ratePerDay = totalLost / Math.max(daySpan, 1); // kg/day
+  const ratePerDay = totalLost / Math.max(daySpan, 1);
   const ratePerWeek = ratePerDay * 7;
 
-  // 7700 kcal = 1kg fat rule
-  const deficitPerDay = Math.round(ratePerDay * 7700);
+  // Water-weight corrected deficit (first 14 days keto = mostly water)
+  const fatFraction = daySpan < 14 ? 0.3 : daySpan < 21 ? 0.6 : 1.0;
+  const deficitPerDay = Math.round(ratePerDay * 7700 * fatFraction);
 
-  // Calorie data for maintenance estimate
+  // Simple maintenance = avg intake + corrected deficit
   const calDays = hist.filter(d=>d.cal>0).slice(0,14);
   const avgCal = calDays.length ? Math.round(calDays.reduce((s,d)=>s+d.cal,0)/calDays.length) : 0;
-  // Maintenance = avg intake + deficit
   const maintenance = avgCal > 0 ? Math.round(avgCal + deficitPerDay) : 0;
 
-  // Goal prediction
+  // Adaptive TDEE
+  const adaptive = adaptiveTDEE(hist);
+
+  // Goal prediction — use adaptive TDEE if available, else simple rate
   const goalW = LS.get('goal_weight', 80);
   const remaining = Math.max(0, latest - goalW);
   const daysToGoal = ratePerDay > 0.001 ? Math.round(remaining / ratePerDay) : null;
@@ -3614,7 +3846,7 @@ function analyticsData(hist) {
   }
 
   return { latest, oldest, totalLost, ratePerDay, ratePerWeek, deficitPerDay,
-           avgCal, maintenance, goalW, remaining, daysToGoal, goalDateStr,
+           avgCal, maintenance, adaptive, goalW, remaining, daysToGoal, goalDateStr,
            status, statusColor, statusMsg, wDataLen: wData.length };
 }
 
@@ -3659,6 +3891,42 @@ function exportCSV() {
   a.href = URL.createObjectURL(blob);
   a.download = 'nytyn_health_' + new Date().toISOString().slice(0,10) + '.csv';
   a.click();
+}
+
+function renderAdaptiveTDEE(ad) {
+  if(!ad || !ad.tdee) {
+    const needed = Math.max(0, 5 - (ad ? ad.days : 0));
+    return '<div style="background:#F5F5F5;border-radius:10px;padding:10px 12px;margin-bottom:12px;display:flex;align-items:center;gap:10px">'
+      + '<div style="font-size:20px">🧠</div>'
+      + '<div>'
+      + '<div style="font-size:12px;font-weight:700;color:#555">Adaptive TDEE</div>'
+      + '<div style="font-size:11px;color:#888;margin-top:2px">Need ' + needed + ' more day' + (needed===1?'':'s') + ' with both weight + food logged</div>'
+      + '</div></div>';
+  }
+  const confLabels = ['🔴 Very Early','🟡 Low','🟠 Building','🟢 Reliable'];
+  const confColors = ['#C62828','#F57F17','#E65100','#2E7D32'];
+  const confBgs    = ['#FFEBEE','#FFF8E1','#FFF3E0','#E8F5E9'];
+  const ci = Math.min(ad.confidence, 3);
+  const confMsg = ad.confidence < 2
+    ? 'Becomes more accurate after 2–3 weeks of consistent logging.'
+    : 'Reliable enough to base calorie targets on.';
+  const targetRow = ad.confidence >= 2
+    ? '<div style="margin-top:8px;padding:6px 10px;background:rgba(106,27,154,.08);border-radius:8px;font-size:11px;color:#6A1B9A;font-weight:700">'
+      + 'To lose 0.5kg/wk → eat ' + Math.round(ad.tdee - 550) + ' kcal/day  ·  To lose 1kg/wk → eat ' + Math.round(ad.tdee - 1100) + ' kcal/day'
+      + '</div>'
+    : '';
+  return '<div style="background:#EDE7F6;border-radius:10px;padding:12px;margin-bottom:12px">'
+    + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">'
+    + '<div style="font-size:12px;font-weight:700;color:#6A1B9A">🧠 Adaptive TDEE</div>'
+    + '<span style="font-size:10px;background:' + confBgs[ci] + ';color:' + confColors[ci] + ';border-radius:20px;padding:2px 8px;font-weight:700">' + confLabels[ci] + '</span>'
+    + '</div>'
+    + '<div style="display:flex;align-items:baseline;gap:6px;margin-bottom:6px">'
+    + '<div style="font-size:28px;font-weight:700;color:#6A1B9A">' + ad.tdee + '</div>'
+    + '<div style="font-size:12px;color:#888">kcal/day · based on ' + ad.days + ' days</div>'
+    + '</div>'
+    + '<div style="font-size:11px;color:#555;line-height:1.5">EMA-smoothed from your actual intake + weight change data. ' + confMsg + '</div>'
+    + targetRow
+    + '</div>';
 }
 
 function metabolicCard(hist) {
@@ -3730,13 +3998,16 @@ function metabolicCard(hist) {
       </div>
       <div style="background:#E3F2FD;border-radius:10px;padding:10px;text-align:center">
         <div style="font-size:18px;font-weight:700;color:#1565C0">${a.maintenance||'—'}</div>
-        <div style="font-size:10px;color:#888;margin-top:2px">est. maintenance kcal</div>
+        <div style="font-size:10px;color:#888;margin-top:2px">simple TDEE est.</div>
       </div>
       <div style="background:#FFF8E1;border-radius:10px;padding:10px;text-align:center">
         <div style="font-size:15px;font-weight:700;color:var(--gold)">${a.goalDateStr||'—'}</div>
         <div style="font-size:10px;color:#888;margin-top:2px">goal date (est.)</div>
       </div>
     </div>
+
+    ${renderAdaptiveTDEE(a.adaptive)}
+
     <div style="padding:10px 12px;border-radius:10px;border-left:4px solid ${a.statusColor};background:${a.statusColor}15">
       <div style="font-size:13px;font-weight:700;color:${a.statusColor};margin-bottom:3px">${a.status}</div>
       <div style="font-size:12px;color:#555;line-height:1.5">${a.statusMsg}</div>
