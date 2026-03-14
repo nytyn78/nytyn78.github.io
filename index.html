@@ -1421,7 +1421,39 @@ LS.set('start_weight', 116);
   setTimeout(() => { if(typeof fbPush === 'function') fbPush(); }, 1500);
 })();
 
-const blankDay = () => ({entries:[],weight:null,water:0,fasting:false,fastStart:null,fastBest:0,fastAccum:0,workouts:[]});
+// One-time migration: infer fastBest for past days that have entries but no fastBest
+(function migrateFastingHistory() {
+  if(LS.get('fast_migration_v1', false)) return;
+  const today = isoToday();
+  let changed = false;
+  for(let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if(!key || !key.startsWith('hlog_')) continue;
+    const date = key.slice(5);
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(date) || date === today) continue;
+    const day = LS.get(key, null);
+    if(!day || day.fastBest > 0) continue; // already has data
+    // Infer from entries: fast starts at last caloric entry of prev day (approx 19:00)
+    // and ends at first caloric entry of this day
+    const caloricEntries = (day.entries||[]).filter(e => (e.cal||0) >= 20 && e.ts);
+    if(caloricEntries.length === 0) continue;
+    caloricEntries.sort((a,b) => a.ts - b.ts);
+    const firstBite = caloricEntries[0].ts;
+    // Assume fast started at 19:00 the previous day
+    const prevDay = new Date(date + 'T19:00:00').getTime() - 86400000;
+    const inferredFast = Math.floor((firstBite - prevDay) / 1000);
+    // Only use if plausible (between 10h and 30h)
+    if(inferredFast >= 10*3600 && inferredFast <= 30*3600) {
+      day.fastBest = inferredFast;
+      LS.set(key, day);
+      changed = true;
+    }
+  }
+  LS.set('fast_migration_v1', true);
+  if(changed) setTimeout(() => { if(typeof fbPush === 'function') fbPush(); }, 2000);
+})();
+
+
 const safeDay = (d) => { d.entries=d.entries||[]; d.workouts=d.workouts||[]; return d; };
 const loadDay = d => LS.get('hlog_'+d,null) || blankDay();
 const saveDay = (d,v) => LS.set('hlog_'+d,v);
