@@ -1996,27 +1996,59 @@ function addFood(food,qty) {
     S.sel=null; S.srch=''; S.qty=1; S.logTime=''; persist(); render();
     return;
   }
-  // Confirmation before breaking fast
+  // Confirmation before breaking fast — use in-app modal (confirm() blocked in PWA)
   if((sc.cal||0) >= 20 && S.day.fasting) {
     const stopTs = Math.max(ts, Date.now());
     const startTs = S.day.fastStart || stopTs;
     const elapsed = Math.floor((stopTs - startTs) / 1000);
     const hrs = Math.floor(elapsed/3600), mins = Math.floor((elapsed%3600)/60);
     const elapsedStr = hrs > 0 ? hrs+'h '+mins+'m' : mins+'m';
-    if(!confirm('⚠️ You are currently fasting ('+elapsedStr+' elapsed).\nLogging this will break your fast. Continue?')) {
-      return; // user cancelled — don't add food
-    }
-    // User confirmed — stop the fast and save best time
-    if(elapsed > 0) S.day.fastBest = Math.max(S.day.fastBest||0, elapsed);
-    // Save fastStart so rmFood can restore it if deleted
-    S._lastFastStart = S.day.fastStart;
-    S._lastFastBest = S.day.fastBest;
-    S._fastBrokeByEntryId = entry.id;
-    S.day.fasting = false;
-    S.day.fastStart = null;
-    S.fastElapsed = 0;
-    if(S.fastTimer){ clearInterval(S.fastTimer); S.fastTimer=null; }
+    showFastBreakModal(food, qty, entry, elapsed, elapsedStr);
+    return; // modal handles the rest
   }
+  S.day.entries.push(entry);
+  S.sel=null; S.srch=''; S.qty=1; S.logTime=''; persist(); render();
+}
+
+function showFastBreakModal(food, qty, entry, elapsed, elapsedStr) {
+  // Remove any existing modal
+  document.getElementById('fast-break-modal')?.remove();
+  const modal = document.createElement('div');
+  modal.id = 'fast-break-modal';
+  modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px';
+  modal.innerHTML = `
+    <div style="background:#fff;border-radius:20px;padding:24px;max-width:320px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.3)">
+      <div style="font-size:36px;margin-bottom:12px">⏱</div>
+      <div style="font-size:16px;font-weight:700;color:#1A2332;margin-bottom:8px">You're currently fasting</div>
+      <div style="font-size:14px;color:#888;margin-bottom:6px">${elapsedStr} elapsed</div>
+      <div style="font-size:13px;color:#555;margin-bottom:20px;line-height:1.5">Logging <b>${entry.name}</b> will break your fast.<br>Continue?</div>
+      <div style="display:flex;gap:10px">
+        <button onclick="document.getElementById('fast-break-modal').remove()" 
+          style="flex:1;padding:12px;background:#F5F5F5;color:#555;border:none;border-radius:12px;font-size:14px;font-weight:700;font-family:Georgia,serif">
+          Cancel
+        </button>
+        <button onclick="confirmFastBreak(${JSON.stringify(entry).replace(/"/g,'&quot;')},${elapsed})"
+          style="flex:1;padding:12px;background:#EF5350;color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;font-family:Georgia,serif">
+          Break Fast
+        </button>
+      </div>
+    </div>`;
+  document.body.appendChild(modal);
+}
+
+function confirmFastBreak(entry, elapsed) {
+  document.getElementById('fast-break-modal')?.remove();
+  // Stop the fast
+  if(elapsed > 0) S.day.fastBest = Math.max(S.day.fastBest||0, elapsed);
+  S._lastFastStart = S.day.fastStart;
+  S._lastFastBest = S.day.fastBest;
+  S._fastBrokeByEntryId = entry.id;
+  S.day.fasting = false;
+  S.day.fastStart = null;
+  S.fastElapsed = 0;
+  if(S.fastTimer){ clearInterval(S.fastTimer); S.fastTimer=null; }
+  // Add the food entry
+  if(!S.day.entries) S.day.entries = [];
   S.day.entries.push(entry);
   S.sel=null; S.srch=''; S.qty=1; S.logTime=''; persist(); render();
 }
@@ -2032,16 +2064,30 @@ function fmtTime(ts) {
 function rmFood(id) {
   const removed = S.day.entries.find(e=>e.id===id);
   S.day.entries = S.day.entries.filter(e=>e.id!==id);
-  // If this entry broke the fast, offer to restore fasting state
+  // If this entry broke the fast, offer to restore fasting state via modal
   if(S._fastBrokeByEntryId === id && S._lastFastStart) {
-    if(confirm('This meal broke your fast. Restore fasting timer?')) {
-      S.day.fasting = true;
-      S.day.fastStart = S._lastFastStart;
-      S.day.fastBest = S._lastFastBest || 0;
-      S._lastFastStart = null; S._lastFastBest = null; S._fastBrokeByEntryId = null;
-      persist(); render(); return;
-    }
+    const savedStart = S._lastFastStart;
+    const savedBest = S._lastFastBest;
     S._lastFastStart = null; S._lastFastBest = null; S._fastBrokeByEntryId = null;
+    // Show restore modal
+    const modal = document.createElement('div');
+    modal.id = 'fast-restore-modal';
+    modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px';
+    modal.innerHTML = `
+      <div style="background:#fff;border-radius:20px;padding:24px;max-width:320px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.3)">
+        <div style="font-size:36px;margin-bottom:12px">⏱</div>
+        <div style="font-size:16px;font-weight:700;color:#1A2332;margin-bottom:8px">Restore fasting timer?</div>
+        <div style="font-size:13px;color:#555;margin-bottom:20px;line-height:1.5">This meal broke your fast.<br>Restore the timer from where it was?</div>
+        <div style="display:flex;gap:10px">
+          <button onclick="document.getElementById('fast-restore-modal').remove();persist();render()"
+            style="flex:1;padding:12px;background:#F5F5F5;color:#555;border:none;border-radius:12px;font-size:14px;font-weight:700;font-family:Georgia,serif">No</button>
+          <button onclick="document.getElementById('fast-restore-modal').remove();S.day.fasting=true;S.day.fastStart=${savedStart};S.day.fastBest=${savedBest||0};persist();render()"
+            style="flex:1;padding:12px;background:var(--teal);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;font-family:Georgia,serif">Restore</button>
+        </div>
+      </div>`;
+    document.body.appendChild(modal);
+    S.day.entries = S.day.entries.filter(e=>e.id!==id);
+    return;
   }
   persist();
   // Store for undo
@@ -3517,9 +3563,12 @@ function analyticsData(hist) {
 
   const latest = wData[wData.length-1].weight;
   const oldest = wData[0].weight;
-  const daySpan = wData.length;
+  // Use actual date span in days, not entry count
+  const firstDate = new Date(wData[0].date);
+  const lastDate = new Date(wData[wData.length-1].date);
+  const daySpan = Math.max(1, Math.round((lastDate - firstDate) / (1000*60*60*24)));
   const totalLost = oldest - latest;
-  const ratePerDay = totalLost / Math.max(daySpan-1, 1); // kg/day
+  const ratePerDay = totalLost / Math.max(daySpan, 1); // kg/day
   const ratePerWeek = ratePerDay * 7;
 
   // 7700 kcal = 1kg fat rule
