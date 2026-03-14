@@ -1307,10 +1307,10 @@ const sumMacros = (entries=[]) => entries.reduce((a,e)=>
   {protein:0,carbs:0,fat:0,cal:0});
 const scale = (f,q) => ({protein:+(f.protein*q).toFixed(1),carbs:+(f.carbs*q).toFixed(1),fat:+(f.fat*q).toFixed(1),cal:Math.round(f.cal*q)});
 const hms = s => [Math.floor(s/3600),Math.floor(s%3600/60),s%60].map(v=>String(v).padStart(2,'0')).join(':');
-const isoToday = () => new Date().toISOString().split('T')[0];
+const isoToday = () => { const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
 // Filter out today from history arrays used in charts — today's data is incomplete until day ends
 const histPast = (h) => h.filter(d => d.date !== isoToday());
-const isoTomorrow = () => { const d=new Date(); d.setDate(d.getDate()+1); return d.toISOString().split('T')[0]; };
+const isoTomorrow = () => { const d=new Date(); d.setDate(d.getDate()+1); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
 
 // Swap persistence helpers — saved with date so they expire automatically
 function loadSwaps() {
@@ -1352,10 +1352,9 @@ let _undoTimer = null;
 const APP_VERSION = 'v2.26 · 14-Mar-2026';
 // One-time fix: reset corrupt start_weight
 LS.set('start_weight', 116);
-// One-time fix: restore Mar 9-11 logs from screenshot data
+// Permanent seed: Mar 9-11 baseline data. No one-time flag — runs every load.
+// upsert() checks findIndex before inserting so this is safe to run repeatedly.
 (function restoreLostLogs() {
-  const done = LS.get('logs_restored_v2', false);
-  if(done) return;
   // Mar 9: 115.8kg, 4L water, P107 C19 F92 Cal1317, workout done
   const d9 = '2026-03-09';
   const day9 = LS.get('hlog_'+d9, null) || {};
@@ -1366,32 +1365,28 @@ LS.set('start_weight', 116);
   const day10 = LS.get('hlog_'+d10, null) || {};
   const restored10 = Object.assign({entries:[],weight:115.3,water:2,fasting:false,fastStart:null,fastBest:0,fastAccum:0,workouts:[]}, day10, {weight:115.3,water:2});
   LS.set('hlog_'+d10, restored10);
-  // Mar 11: 114.1kg (today — only set if not already logged)
+  // Mar 11: 114.1kg — only set weight if not already logged (preserve live data)
   const d11 = '2026-03-11';
   const day11 = LS.get('hlog_'+d11, null) || {};
-  if(!day11.weight) {
-    day11.weight = 114.1;
-    LS.set('hlog_'+d11, day11);
-  }
-  // Rebuild hlog_history with correct macro data
+  if(!day11.weight) { day11.weight = 114.1; LS.set('hlog_'+d11, day11); }
+  // Always ensure hlog_history has correct macro rows for Mar 9 & 10
+  // (these days have no entries[] so history is the only source of truth for macros)
   const hist = LS.get('hlog_history', []);
-  const upsert = (date, cal, protein, carbs, fat, weight, water) => {
+  const upsert = (date, cal, protein, carbs, fat, weight, water, workoutDone) => {
     const i = hist.findIndex(x=>x.date===date);
-    const entry = {date, cal, protein, carbs, fat, weight, water, workoutDone: date==='2026-03-09'};
+    const entry = {date, cal, protein, carbs, fat, weight, water, workoutDone};
     if(i>=0) hist[i] = entry; else hist.unshift(entry);
   };
-  upsert('2026-03-09', 1317, 107, 19, 92, 115.8, 4);
-  upsert('2026-03-10', 927,  73,  13, 68, 115.3, 2);
+  upsert('2026-03-09', 1317, 107, 19, 92, 115.8, 4, true);
+  upsert('2026-03-10', 927,  73,  13, 68, 115.3, 2, false);
   hist.sort((a,b)=>b.date.localeCompare(a.date));
   LS.set('hlog_history', hist);
-  LS.set('logs_restored_v2', true);
 })();
 
 // Manual restore function — callable from Settings button
 // One-time fix: restore Mar 11 entries that were lost
 (function fixMisplacedEntries() {
-  const done = LS.get('entries_fixed_v4', false);
-  if(done) return;
+  // No one-time flag — entry IDs are checked before inserting, safe to run every load
   const d11 = '2026-03-11';
   const day11 = LS.get('hlog_'+d11, null) || {entries:[],weight:114.1,water:0,fasting:false,fastStart:null,fastBest:0,fastAccum:0,workouts:[]};
   // Build timestamps for Mar 11
@@ -1409,7 +1404,6 @@ LS.set('start_weight', 116);
     day11.entries = [...(day11.entries||[]), ...toAdd];
     LS.set('hlog_'+d11, day11);
   }
-  LS.set('entries_fixed_v4', true);
   // Push to Firebase after init
   setTimeout(() => { if(typeof fbPush === 'function') fbPush(); }, 1500);
 })();
@@ -1558,6 +1552,46 @@ async function fbPull() {
     }
   } catch(e) { console.warn('fbPull failed:', e); }
   finally { fbSyncing = false; }
+}
+
+async function forceRestoreFromFirebase() {
+  if(!fbDb || !fbUser) { alert('Not connected to Firebase. Connect first in Settings.'); return; }
+  const btn = document.getElementById('force-restore-btn');
+  if(btn) { btn.textContent = '⏳ Restoring...'; btn.disabled = true; }
+  try {
+    const { ref, get } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js');
+    const snap = await get(ref(fbDb, 'users/'+fbUser));
+    if(!snap.exists()) { alert('No data found in Firebase for your account.'); return; }
+    const data = snap.val();
+    // Merge history — keep local entries not in cloud, add cloud entries not local
+    const localHist = LS.get('hlog_history', []);
+    const cloudHist = data.history || [];
+    const merged = [...cloudHist];
+    localHist.forEach(le => {
+      if(!merged.find(ce => ce.date === le.date)) merged.push(le);
+    });
+    merged.sort((a,b) => b.date.localeCompare(a.date));
+    LS.set('hlog_history', merged);
+    S.hist = merged;
+    // Restore all daily logs from cloud without overwriting local ones that are newer
+    if(data.logs) {
+      Object.entries(data.logs).forEach(([k, v]) => {
+        const date = k.replace(/_/g, '-');
+        const local = LS.get('hlog_'+date, null);
+        // Only overwrite if local is blank/missing
+        if(!local || !(local.entries||[]).length) {
+          LS.set('hlog_'+date, v);
+        }
+      });
+    }
+    render();
+    const count = merged.length;
+    if(btn) { btn.textContent = '✅ Restored ' + count + ' days!'; }
+    setTimeout(() => { if(btn) { btn.textContent = '☁ Restore All Data from Firebase'; btn.disabled = false; }}, 3000);
+  } catch(e) {
+    alert('Restore failed: ' + e.message);
+    if(btn) { btn.textContent = '☁ Restore All Data from Firebase'; btn.disabled = false; }
+  }
 }
 
 function fbWatch() {
@@ -4724,6 +4758,10 @@ function tabSettings() {
       <div style="display:flex;gap:8px">
         <button onclick="fbPush()" style="flex:1;padding:10px;background:var(--teal);color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:700">☁ Sync Now</button>
         <button onclick="clearFbConfig()" style="flex:1;padding:10px;background:#F5F5F5;color:#888;border:none;border-radius:10px;font-size:13px">Disconnect</button>
+      </div>
+      <div style="margin-top:8px">
+        <button id="force-restore-btn" onclick="forceRestoreFromFirebase()" style="width:100%;padding:10px;background:#E8F5E9;color:var(--green);border:1.5px solid var(--green);border-radius:10px;font-size:13px;font-weight:700">☁ Restore All Data from Firebase</button>
+        <div style="font-size:11px;color:#888;margin-top:5px;text-align:center">Merges cloud history into local — use this to recover missing days</div>
       </div>` : `
       <div style="font-size:13px;font-weight:700;color:var(--dark);margin-bottom:8px">Connect Firebase</div>
       <div style="font-size:12px;color:#666;line-height:1.7;margin-bottom:14px">
