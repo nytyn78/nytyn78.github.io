@@ -344,455 +344,418 @@ const searchFoods = (query, db = FOOD_DB) => {
 const KETO_PLAN = [
   {
     day: "Monday",
-    theme: "Andhra Egg Masala & Paneer Methi Bhurji",
+    theme: "Anda Bhurji & Paneer Masala",
     meals: [
       {
-        name: "Andhra Egg Masala with Paneer",
+        name: "Masala Anda Bhurji",
         time: "2:00 PM",
-        protein: 42, carbs: 10, fat: 46, cal: 618,
+        protein: 43, carbs: 8, fat: 46, cal: 618,
         ingredients: [
-          { hi: "3 पूरे अंडे — उबले और छिले", en: "3 whole eggs — boiled and peeled", qty: "3" },
-          { hi: "100 ग्राम पनीर — मोटे क्यूब्स", en: "100g paneer — thick cubes", qty: "100g" },
+          { hi: "4 पूरे अंडे — फेंटे हुए", en: "4 whole eggs — whisked", qty: "4" },
           { hi: "2 छोटे चम्मच घी", en: "2 tsp ghee", qty: "2 tsp" },
-          { hi: "30 ग्राम प्याज — बारीक कटा", en: "30g onion — finely chopped", qty: "30g" },
-          { hi: "50 ग्राम टमाटर — बारीक कटा", en: "50g tomato — finely chopped", qty: "50g" },
+          { hi: "60 ग्राम प्याज — बारीक कटा", en: "60g onion — finely chopped", qty: "60g" },
+          { hi: "60 ग्राम टमाटर — बारीक कटा", en: "60g tomato — finely chopped", qty: "60g" },
+          { hi: "2-3 हरी मिर्च — बारीक कटी", en: "2-3 green chillies — finely chopped", qty: "2-3" },
           { hi: "1 छोटा चम्मच अदरक-लहसुन पेस्ट", en: "1 tsp ginger-garlic paste", qty: "1 tsp" },
-          { hi: "1.5 छोटा चम्मच लाल मिर्च पाउडर", en: "1.5 tsp red chilli powder", qty: "1.5 tsp" },
-          { hi: "सरसों, करी पत्ता, नमक, हल्दी, हरा धनिया", en: "Mustard seeds, curry leaves, salt, turmeric, coriander", qty: "to taste" },
+          { hi: "नमक, जीरा, हल्दी, लाल मिर्च, गरम मसाला, हरा धनिया", en: "Salt, cumin, turmeric, red chilli, garam masala, coriander", qty: "to taste" },
         ],
         steps: [
-          { hi: "घी में सरसों, करी पत्ता तड़काएं — 20 सेकंड", en: "Splutter mustard seeds, curry leaves in ghee — 20 sec" },
-          { hi: "प्याज — 3 मिनट गहरा सुनहरा भूनें", en: "Onion — 3 min deep golden" },
+          { hi: "घी में जीरा — प्याज और हरी मिर्च — 3 मिनट गहरा सुनहरा", en: "Ghee — cumin — onion and green chilli — 3 min deep golden" },
           { hi: "अदरक-लहसुन पेस्ट — 1 मिनट — टमाटर — 2 मिनट तेल छूटने तक", en: "Ginger-garlic paste — 1 min — tomato — 2 min until oil separates" },
-          { hi: "लाल मिर्च, हल्दी — 1 मिनट भूनें", en: "Red chilli, turmeric — bhuno 1 min" },
-          { hi: "पनीर क्यूब्स — 2 मिनट भूनें", en: "Paneer cubes — sauté 2 min" },
-          { hi: "उबले अंडे आधे काटें — मसाले में डालें — 2 मिनट धीमी आंच", en: "Halve boiled eggs — fold into masala — 2 min low flame" },
-          { hi: "हरा धनिया गार्निश — तीखा और मसालेदार परोसें", en: "Garnish with coriander — serve hot and spicy" },
+          { hi: "हल्दी, लाल मिर्च, गरम मसाला — 30 सेकंड भूनें", en: "Turmeric, red chilli, garam masala — bhuno 30 sec" },
+          { hi: "फेंटे अंडे डालें — धीमी आंच — धीरे-धीरे हिलाएं", en: "Pour in whisked eggs — low heat — stir slowly and continuously" },
+          { hi: "अंडे थोड़े नम रहें तब उतारें — ज़्यादा पकाने से रबड़ जैसे हो जाते हैं", en: "Remove when eggs are just set but still slightly moist — overcooking makes them rubbery" },
+          { hi: "नमक — भरपूर हरा धनिया — नींबू निचोड़ें — तुरंत परोसें", en: "Salt — generous fresh coriander — squeeze lemon — serve immediately" },
         ],
       },
       {
-        name: "Methi Paneer Bhurji with Eggs",
+        name: "Dhaba Style Paneer Masala",
         time: "6:30 PM",
-        protein: 43, carbs: 9, fat: 47, cal: 622,
+        protein: 42, carbs: 11, fat: 47, cal: 622,
         ingredients: [
-          { hi: "2 पूरे अंडे — फेंटे हुए", en: "2 whole eggs — whisked", qty: "2" },
-          { hi: "100 ग्राम पनीर — क्रम्बल्ड", en: "100g paneer — crumbled", qty: "100g" },
+          { hi: "100 ग्राम पनीर — मोटे क्यूब्स", en: "100g paneer — thick cubes", qty: "100g" },
           { hi: "2 छोटे चम्मच घी", en: "2 tsp ghee", qty: "2 tsp" },
-          { hi: "40 ग्राम मेथी पत्तियां — बारीक कटी", en: "40g methi leaves — finely chopped", qty: "40g" },
-          { hi: "30 ग्राम प्याज — बारीक कटा", en: "30g onion — finely chopped", qty: "30g" },
-          { hi: "50 ग्राम टमाटर — बारीक कटा", en: "50g tomato — finely chopped", qty: "50g" },
-          { hi: "नमक, जीरा, हींग, हल्दी, लाल मिर्च", en: "Salt, cumin, asafoetida, turmeric, red chilli", qty: "to taste" },
+          { hi: "60 ग्राम प्याज — बारीक कटा", en: "60g onion — finely chopped", qty: "60g" },
+          { hi: "80 ग्राम टमाटर — बारीक कटा", en: "80g tomato — finely chopped", qty: "80g" },
+          { hi: "1 छोटा चम्मच अदरक-लहसुन पेस्ट", en: "1 tsp ginger-garlic paste", qty: "1 tsp" },
+          { hi: "1 छोटा चम्मच लाल मिर्च पाउडर", en: "1 tsp red chilli powder", qty: "1 tsp" },
+          { hi: "नमक, जीरा, हल्दी, धनिया, गरम मसाला, कसूरी मेथी", en: "Salt, cumin, turmeric, coriander, garam masala, kasuri methi", qty: "to taste" },
+          { hi: "साथ में: कोई भी एक सब्ज़ी — परिवार के खाने से", en: "Alongside: any one sabzi from family cooking", qty: "1 katori" },
         ],
         steps: [
-          { hi: "घी में जीरा, हींग — 15 सेकंड", en: "Ghee — cumin, asafoetida — 15 sec" },
-          { hi: "प्याज — 2 मिनट — मेथी पत्तियां — 1 मिनट मुरझाने तक", en: "Onion — 2 min — methi leaves — 1 min until wilted" },
-          { hi: "टमाटर — हल्दी, लाल मिर्च — 2 मिनट", en: "Tomato — turmeric, red chilli — 2 min" },
-          { hi: "अंडे फोड़ें — धीरे भुर्जी बनाएं", en: "Crack eggs in — scramble gently" },
-          { hi: "पनीर क्रम्बल करके मिलाएं — 1 मिनट", en: "Fold in crumbled paneer — 1 min" },
-          { hi: "नमक — हरा धनिया — गरम परोसें", en: "Salt — fresh coriander — serve hot" },
+          { hi: "घी में जीरा तड़काएं — प्याज 4 मिनट गहरा सुनहरा", en: "Splutter cumin in ghee — onion 4 min deep golden" },
+          { hi: "अदरक-लहसुन पेस्ट — 2 मिनट — टमाटर — 3 मिनट तेल छूटने तक", en: "Ginger-garlic paste — 2 min — tomato — 3 min until oil separates" },
+          { hi: "सभी मसाले डालें — 1 मिनट भूनें — 2 टेबलस्पून पानी डालें", en: "Add all spices — bhuno 1 min — add 2 tbsp water" },
+          { hi: "पनीर क्यूब्स डालें — मसाले में अच्छे से कोट करें — 2 मिनट", en: "Add paneer cubes — coat well in masala — 2 min" },
+          { hi: "कसूरी मेथी हाथ से मसलकर डालें — हरा धनिया — गरम परोसें", en: "Crush kasuri methi between palms and add — fresh coriander — serve hot" },
         ],
       },
     ],
     shake: true,
     grocery: [
-      { hi: "अंडे", en: "Eggs", qty: "5" },
-      { hi: "पनीर (फुल फैट)", en: "Paneer (full fat)", qty: "200g" },
-      { hi: "मेथी पत्तियां", en: "Methi leaves", qty: "40g" },
-      { hi: "प्याज़", en: "Onion", qty: "60g" },
-      { hi: "टमाटर", en: "Tomato", qty: "100g" },
-      { hi: "करी पत्ता", en: "Curry leaves", qty: "8-10" },
+      { hi: "अंडे", en: "Eggs", qty: "4" },
+      { hi: "पनीर (फुल फैट)", en: "Paneer (full fat)", qty: "100g" },
+      { hi: "प्याज़", en: "Onion", qty: "120g" },
+      { hi: "टमाटर", en: "Tomato", qty: "140g" },
+      { hi: "हरी मिर्च", en: "Green chillies", qty: "4-5" },
       { hi: "घी", en: "Ghee", qty: "4 tsp" },
       { hi: "Isopure Whey", en: "Isopure Whey", qty: "1 scoop" },
-      { hi: "खीरा / मूली", en: "Cucumber / Mooli", qty: "1" },
     ],
     totals: { protein: 110, carbs: 22, fat: 95, cal: 1350 },
   },
   {
     day: "Tuesday",
-    theme: "Palak Paneer Poached Eggs & Egg Mushroom Stir-Fry",
+    theme: "Andhra Anda Masala & Paneer Bhurji",
     meals: [
       {
-        name: "Palak Paneer with Poached Eggs",
+        name: "Andhra Anda Masala",
         time: "2:00 PM",
-        protein: 41, carbs: 11, fat: 46, cal: 614,
+        protein: 42, carbs: 10, fat: 46, cal: 614,
         ingredients: [
-          { hi: "2 पूरे अंडे — पोच्ड", en: "2 whole eggs — poached", qty: "2" },
-          { hi: "100 ग्राम पनीर — क्यूब्स", en: "100g paneer — cubes", qty: "100g" },
+          { hi: "4 पूरे अंडे — उबले और छिले", en: "4 whole eggs — boiled and peeled", qty: "4" },
           { hi: "2 छोटे चम्मच घी", en: "2 tsp ghee", qty: "2 tsp" },
-          { hi: "120 ग्राम पालक — उबालकर पीसी हुई", en: "120g spinach — blanched and puréed", qty: "120g" },
-          { hi: "30 ग्राम प्याज — बारीक कटा", en: "30g onion — finely chopped", qty: "30g" },
-          { hi: "60 ग्राम टमाटर — बारीक कटा", en: "60g tomato — finely chopped", qty: "60g" },
+          { hi: "60 ग्राम प्याज — बारीक कटा", en: "60g onion — finely chopped", qty: "60g" },
+          { hi: "80 ग्राम टमाटर — बारीक कटा", en: "80g tomato — finely chopped", qty: "80g" },
           { hi: "1 छोटा चम्मच अदरक-लहसुन पेस्ट", en: "1 tsp ginger-garlic paste", qty: "1 tsp" },
-          { hi: "नमक, जीरा, हल्दी, गरम मसाला, हरी मिर्च", en: "Salt, cumin, turmeric, garam masala, green chilli", qty: "to taste" },
+          { hi: "1.5 छोटा चम्मच लाल मिर्च पाउडर — तीखा", en: "1.5 tsp red chilli powder — generous", qty: "1.5 tsp" },
+          { hi: "नमक, सरसों, करी पत्ता, हल्दी, धनिया, इमली का पेस्ट थोड़ा", en: "Salt, mustard seeds, curry leaves, turmeric, coriander, small amount tamarind paste", qty: "to taste" },
+          { hi: "साथ में: कोई भी एक सब्ज़ी — परिवार के खाने से", en: "Alongside: any one sabzi from family cooking", qty: "1 katori" },
         ],
         steps: [
-          { hi: "पालक उबालें — ठंडे पानी में डालें — मोटी प्यूरी बनाएं", en: "Blanch spinach — refresh in cold water — blend to rough purée" },
-          { hi: "घी में जीरा — प्याज 3 मिनट — अदरक-लहसुन 1 मिनट", en: "Ghee — cumin — onion 3 min — ginger-garlic 1 min" },
-          { hi: "टमाटर — मसाले — 2 मिनट तेल छूटने तक", en: "Tomato — spices — 2 min until oil separates" },
-          { hi: "पालक प्यूरी डालें — 3 मिनट पकाएं", en: "Add spinach purée — cook 3 min" },
-          { hi: "पनीर क्यूब्स डालें — मिलाएं — 2 मिनट", en: "Add paneer cubes — fold — 2 min" },
-          { hi: "बीच में जगह बनाएं — अंडे पोच करें — ढकें — 4 मिनट", en: "Make wells in centre — crack eggs — cover — poach 4 min" },
-          { hi: "गरम मसाला छिड़कें — तुरंत परोसें", en: "Sprinkle garam masala — serve immediately" },
+          { hi: "उबले अंडों को चाकू से 3-4 जगह हल्का काटें — मसाला अंदर जाएगा", en: "Score boiled eggs lightly with knife 3-4 times each — masala will penetrate" },
+          { hi: "घी में सरसों — करी पत्ता — 20 सेकंड", en: "Ghee — mustard seeds — curry leaves — 20 sec" },
+          { hi: "प्याज — 4 मिनट गहरा सुनहरा — यही Andhra स्वाद का आधार है", en: "Onion — 4 min deep golden — this is the base of Andhra flavour" },
+          { hi: "अदरक-लहसुन — 1 मिनट — टमाटर — 3 मिनट तेल छूटने तक", en: "Ginger-garlic — 1 min — tomato — 3 min until oil separates" },
+          { hi: "लाल मिर्च भरपूर — हल्दी — इमली — 1 मिनट तेज़ आंच", en: "Generous red chilli — turmeric — tamarind — 1 min high heat" },
+          { hi: "2 टेबलस्पून पानी — उबले अंडे डालें — मसाले से कोट करें — 3 मिनट धीमी आंच", en: "Add 2 tbsp water — add boiled eggs — coat in masala — 3 min low flame" },
+          { hi: "करी पत्ता से गार्निश — तीखा परोसें", en: "Garnish with curry leaves — serve hot and spicy" },
         ],
       },
       {
-        name: "Egg Mushroom Stir-Fry with Paneer",
+        name: "Spicy Paneer Bhurji",
         time: "6:30 PM",
-        protein: 44, carbs: 8, fat: 48, cal: 626,
+        protein: 43, carbs: 9, fat: 48, cal: 626,
         ingredients: [
-          { hi: "3 पूरे अंडे — फेंटे हुए", en: "3 whole eggs — whisked", qty: "3" },
-          { hi: "80 ग्राम पनीर — क्यूब्स", en: "80g paneer — cubes", qty: "80g" },
+          { hi: "120 ग्राम पनीर — क्रम्बल्ड", en: "120g paneer — crumbled", qty: "120g" },
           { hi: "2 छोटे चम्मच घी", en: "2 tsp ghee", qty: "2 tsp" },
-          { hi: "100 ग्राम मशरूम — चौथाई काटे हुए", en: "100g mushrooms — quartered", qty: "100g" },
-          { hi: "60 ग्राम शिमला मिर्च — पतली स्ट्रिप्स", en: "60g capsicum — thin strips", qty: "60g" },
-          { hi: "30 ग्राम प्याज — पतला कटा", en: "30g onion — thinly sliced", qty: "30g" },
-          { hi: "1 छोटा चम्मच अदरक-लहसुन पेस्ट", en: "1 tsp ginger-garlic paste", qty: "1 tsp" },
-          { hi: "नमक, काली मिर्च, लाल मिर्च", en: "Salt, black pepper, red chilli", qty: "to taste" },
+          { hi: "60 ग्राम प्याज — बारीक कटा", en: "60g onion — finely chopped", qty: "60g" },
+          { hi: "60 ग्राम टमाटर — बारीक कटा", en: "60g tomato — finely chopped", qty: "60g" },
+          { hi: "2 हरी मिर्च — बारीक कटी", en: "2 green chillies — finely chopped", qty: "2" },
+          { hi: "नमक, जीरा, हल्दी, लाल मिर्च, चाट मसाला, हरा धनिया, नींबू", en: "Salt, cumin, turmeric, red chilli, chaat masala, coriander, lemon", qty: "to taste" },
+          { hi: "साथ में: कोई भी एक सब्ज़ी — परिवार के खाने से", en: "Alongside: any one sabzi from family cooking", qty: "1 katori" },
         ],
         steps: [
-          { hi: "घी में मशरूम — तेज़ आंच — सुनहरा और पानी सूखने तक — अलग रखें", en: "Ghee — mushrooms — high heat — golden and dry — set aside" },
-          { hi: "उसी घी में प्याज, शिमला मिर्च — 2 मिनट", en: "Same ghee — onion, capsicum — 2 min" },
-          { hi: "अदरक-लहसुन पेस्ट — 1 मिनट", en: "Ginger-garlic paste — 1 min" },
-          { hi: "अंडे फोड़ें — भुर्जी बनाएं — धीरे हिलाएं", en: "Crack eggs in — scramble — stir gently" },
-          { hi: "पनीर और मशरूम वापस डालें — 1 मिनट मिलाएं", en: "Return paneer and mushrooms — fold — 1 min" },
-          { hi: "काली मिर्च — नींबू — गरम परोसें", en: "Black pepper — lemon squeeze — serve hot" },
+          { hi: "घी में जीरा — हरी मिर्च — प्याज 3 मिनट सुनहरा", en: "Ghee — cumin — green chilli — onion 3 min golden" },
+          { hi: "टमाटर — हल्दी — लाल मिर्च — 2 मिनट तेल छूटने तक", en: "Tomato — turmeric — red chilli — 2 min until oil separates" },
+          { hi: "क्रम्बल्ड पनीर डालें — अच्छे से मिलाएं — 2 मिनट तेज़ आंच", en: "Add crumbled paneer — mix well — 2 min high heat" },
+          { hi: "चाट मसाला — नींबू — भरपूर हरा धनिया — तुरंत परोसें", en: "Chaat masala — lemon squeeze — generous fresh coriander — serve immediately" },
         ],
       },
     ],
     shake: true,
     grocery: [
-      { hi: "अंडे", en: "Eggs", qty: "5" },
-      { hi: "पनीर (फुल फैट)", en: "Paneer (full fat)", qty: "180g" },
-      { hi: "पालक", en: "Spinach", qty: "120g" },
-      { hi: "मशरूम", en: "Mushrooms", qty: "100g" },
-      { hi: "शिमला मिर्च", en: "Capsicum", qty: "60g" },
-      { hi: "प्याज़", en: "Onion", qty: "60g" },
-      { hi: "टमाटर", en: "Tomato", qty: "60g" },
+      { hi: "अंडे", en: "Eggs", qty: "4" },
+      { hi: "पनीर (फुल फैट)", en: "Paneer (full fat)", qty: "120g" },
+      { hi: "प्याज़", en: "Onion", qty: "120g" },
+      { hi: "टमाटर", en: "Tomato", qty: "140g" },
+      { hi: "करी पत्ता", en: "Curry leaves", qty: "10-12" },
       { hi: "घी", en: "Ghee", qty: "4 tsp" },
       { hi: "Isopure Whey", en: "Isopure Whey", qty: "1 scoop" },
-      { hi: "खीरा / मूली", en: "Cucumber / Mooli", qty: "1" },
     ],
     totals: { protein: 110, carbs: 22, fat: 95, cal: 1350 },
   },
   {
     day: "Wednesday",
-    theme: "Smoky Baingan Bharta Eggs & Paneer Egg Bhurji",
+    theme: "Anda Curry & Tawa Paneer",
     meals: [
       {
-        name: "Smoky Baingan Bharta with Eggs",
+        name: "Dhaba Anda Curry",
         time: "2:00 PM",
-        protein: 40, carbs: 12, fat: 45, cal: 605,
+        protein: 41, carbs: 11, fat: 46, cal: 610,
         ingredients: [
-          { hi: "2 पूरे अंडे", en: "2 whole eggs", qty: "2" },
-          { hi: "100 ग्राम पनीर — क्रम्बल्ड", en: "100g paneer — crumbled", qty: "100g" },
+          { hi: "4 पूरे अंडे — उबले और छिले", en: "4 whole eggs — boiled and peeled", qty: "4" },
           { hi: "2 छोटे चम्मच घी", en: "2 tsp ghee", qty: "2 tsp" },
-          { hi: "150 ग्राम बैंगन — सीधे आंच पर भुना हुआ", en: "150g baingan — charred directly over flame", qty: "150g" },
-          { hi: "30 ग्राम प्याज — बारीक कटा", en: "30g onion — finely chopped", qty: "30g" },
-          { hi: "60 ग्राम टमाटर — बारीक कटा", en: "60g tomato — finely chopped", qty: "60g" },
-          { hi: "नमक, जीरा, हल्दी, लाल मिर्च, हरा धनिया, हरी मिर्च", en: "Salt, cumin, turmeric, red chilli, coriander, green chilli", qty: "to taste" },
+          { hi: "70 ग्राम प्याज — बारीक कटा", en: "70g onion — finely chopped", qty: "70g" },
+          { hi: "80 ग्राम टमाटर — बारीक कटा", en: "80g tomato — finely chopped", qty: "80g" },
+          { hi: "1 छोटा चम्मच अदरक-लहसुन पेस्ट", en: "1 tsp ginger-garlic paste", qty: "1 tsp" },
+          { hi: "नमक, जीरा, हल्दी, धनिया, लाल मिर्च, गरम मसाला", en: "Salt, cumin, turmeric, coriander, red chilli, garam masala", qty: "to taste" },
+          { hi: "साथ में: कोई भी एक सब्ज़ी — परिवार के खाने से", en: "Alongside: any one sabzi from family cooking", qty: "1 katori" },
         ],
         steps: [
-          { hi: "बैंगन सीधे गैस पर रखें — चारों तरफ से जलने तक — 10-12 मिनट", en: "Place baingan directly on flame — char all sides — 10-12 min" },
-          { hi: "ठंडा होने दें — छीलें — मैश करें — धुएं की खुशबू रखें", en: "Cool — peel — mash well — preserve the smoky aroma" },
-          { hi: "घी में जीरा — प्याज 3 मिनट गहरा सुनहरा", en: "Ghee — cumin — onion 3 min deep golden" },
-          { hi: "टमाटर — मसाले — 2 मिनट तेल छूटने तक", en: "Tomato — spices — 2 min until oil separates" },
-          { hi: "भरता मिलाएं — 2 मिनट पकाएं", en: "Mix in bharta — cook 2 min" },
-          { hi: "बीच में जगह — अंडे फोड़ें — ढकें — 3 मिनट", en: "Make wells — crack eggs in — cover — 3 min" },
-          { hi: "पनीर क्रम्बल करें — हरा धनिया — गरम परोसें", en: "Crumble paneer over — coriander — serve hot" },
+          { hi: "उबले अंडों को घी में तेज़ आंच पर 2 मिनट रोल करें — बाहर से हल्का सुनहरा हो", en: "Roll boiled eggs in ghee on high heat 2 min — outside turns lightly golden — this adds texture" },
+          { hi: "उसी घी में जीरा — प्याज 4 मिनट गहरा भूनें", en: "In same ghee — cumin — onion 4 min deep fry" },
+          { hi: "अदरक-लहसुन — 1 मिनट — टमाटर — 3 मिनट तेल छूटने तक", en: "Ginger-garlic — 1 min — tomato — 3 min until oil separates" },
+          { hi: "सभी मसाले — 1 मिनट भूनें — ¼ कप पानी डालें", en: "All spices — bhuno 1 min — add ¼ cup water" },
+          { hi: "तले अंडे ग्रेवी में डालें — ढकें — 4 मिनट धीमी आंच", en: "Add golden eggs to gravy — cover — 4 min low flame" },
+          { hi: "हरा धनिया — गरम परोसें", en: "Fresh coriander — serve hot" },
         ],
       },
       {
-        name: "Paneer Egg Bhurji with Capsicum",
+        name: "Tawa Paneer Masala",
         time: "6:30 PM",
-        protein: 45, carbs: 7, fat: 49, cal: 635,
+        protein: 44, carbs: 8, fat: 48, cal: 630,
         ingredients: [
-          { hi: "3 पूरे अंडे — फेंटे हुए", en: "3 whole eggs — whisked", qty: "3" },
-          { hi: "100 ग्राम पनीर — क्रम्बल्ड", en: "100g paneer — crumbled", qty: "100g" },
+          { hi: "100 ग्राम पनीर — मोटे स्लाइस", en: "100g paneer — thick slices", qty: "100g" },
           { hi: "2 छोटे चम्मच घी", en: "2 tsp ghee", qty: "2 tsp" },
-          { hi: "60 ग्राम शिमला मिर्च — छोटे टुकड़े", en: "60g capsicum — small cubes", qty: "60g" },
-          { hi: "30 ग्राम प्याज — बारीक कटा", en: "30g onion — finely chopped", qty: "30g" },
-          { hi: "नमक, जीरा, हरी मिर्च, चाट मसाला, हरा धनिया", en: "Salt, cumin, green chilli, chaat masala, coriander", qty: "to taste" },
+          { hi: "60 ग्राम प्याज — मोटे छल्ले", en: "60g onion — thick rings", qty: "60g" },
+          { hi: "60 ग्राम शिमला मिर्च — मोटे टुकड़े", en: "60g capsicum — thick pieces", qty: "60g" },
+          { hi: "1 छोटा चम्मच तंदूरी मसाला", en: "1 tsp tandoori masala", qty: "1 tsp" },
+          { hi: "नमक, लाल मिर्च, चाट मसाला, नींबू", en: "Salt, red chilli, chaat masala, lemon", qty: "to taste" },
+          { hi: "साथ में: कोई भी एक सब्ज़ी — परिवार के खाने से", en: "Alongside: any one sabzi from family cooking", qty: "1 katori" },
         ],
         steps: [
-          { hi: "घी में जीरा, हरी मिर्च — 20 सेकंड", en: "Ghee — cumin, green chilli — 20 sec" },
-          { hi: "प्याज — 2 मिनट — शिमला मिर्च — 1 मिनट कुरकुरा रखें", en: "Onion — 2 min — capsicum — 1 min keep crunchy" },
-          { hi: "अंडे फोड़ें — धीरे भुर्जी बनाएं", en: "Crack eggs in — scramble gently" },
-          { hi: "पनीर क्रम्बल करके मिलाएं — 1 मिनट", en: "Fold in crumbled paneer — 1 min" },
-          { hi: "चाट मसाला — नींबू — हरा धनिया — तुरंत परोसें", en: "Chaat masala — lemon — coriander — serve immediately" },
+          { hi: "पनीर स्लाइस पर तंदूरी मसाला, लाल मिर्च, नमक — दोनों तरफ अच्छे से लगाएं", en: "Rub tandoori masala, red chilli, salt on paneer slices — coat both sides well" },
+          { hi: "तवे पर घी — तेज़ आंच — पनीर 2 मिनट प्रति साइड — बाहर से चार, अंदर से नरम", en: "Ghee on tawa — high heat — paneer 2 min per side — charred outside, soft inside" },
+          { hi: "उसी तवे पर प्याज छल्ले और शिमला मिर्च — 2 मिनट कुरकुरे रखें", en: "On same tawa — onion rings and capsicum — 2 min keep crunchy" },
+          { hi: "चाट मसाला — नींबू — तुरंत परोसें", en: "Chaat masala — lemon — serve immediately" },
         ],
       },
     ],
     shake: true,
     grocery: [
-      { hi: "अंडे", en: "Eggs", qty: "5" },
-      { hi: "पनीर (फुल फैट)", en: "Paneer (full fat)", qty: "200g" },
-      { hi: "बैंगन", en: "Baingan", qty: "150g" },
-      { hi: "शिमला मिर्च", en: "Capsicum", qty: "120g" },
-      { hi: "प्याज़", en: "Onion", qty: "60g" },
-      { hi: "टमाटर", en: "Tomato", qty: "60g" },
+      { hi: "अंडे", en: "Eggs", qty: "4" },
+      { hi: "पनीर (फुल फैट)", en: "Paneer (full fat)", qty: "100g" },
+      { hi: "प्याज़", en: "Onion", qty: "130g" },
+      { hi: "टमाटर", en: "Tomato", qty: "80g" },
+      { hi: "शिमला मिर्च", en: "Capsicum", qty: "60g" },
       { hi: "घी", en: "Ghee", qty: "4 tsp" },
       { hi: "Isopure Whey", en: "Isopure Whey", qty: "1 scoop" },
-      { hi: "खीरा / मूली", en: "Cucumber / Mooli", qty: "1" },
     ],
     totals: { protein: 110, carbs: 22, fat: 95, cal: 1350 },
   },
   {
     day: "Thursday",
-    theme: "Egg Paneer Masala & Bhindi Egg Stir-Fry",
+    theme: "Anda Bhurji Masala & Paneer Lababdar",
     meals: [
       {
-        name: "Egg Paneer Masala",
+        name: "Punjabi Anda Bhurji",
         time: "2:00 PM",
-        protein: 41, carbs: 11, fat: 46, cal: 614,
+        protein: 42, carbs: 10, fat: 46, cal: 614,
         ingredients: [
-          { hi: "3 पूरे अंडे — उबले और छिले", en: "3 whole eggs — boiled and peeled", qty: "3" },
-          { hi: "90 ग्राम पनीर — मोटे क्यूब्स", en: "90g paneer — thick cubes", qty: "90g" },
-          { hi: "2 छोटे चम्मच घी", en: "2 tsp ghee", qty: "2 tsp" },
-          { hi: "30 ग्राम प्याज — बारीक कटा", en: "30g onion — finely chopped", qty: "30g" },
-          { hi: "60 ग्राम टमाटर — बारीक कटा", en: "60g tomato — finely chopped", qty: "60g" },
-          { hi: "1 छोटा चम्मच अदरक-लहसुन पेस्ट", en: "1 tsp ginger-garlic paste", qty: "1 tsp" },
-          { hi: "नमक, जीरा, करी पत्ता, हल्दी, गरम मसाला, कसूरी मेथी", en: "Salt, cumin, curry leaves, turmeric, garam masala, kasuri methi", qty: "to taste" },
+          { hi: "4 पूरे अंडे — फेंटे हुए", en: "4 whole eggs — whisked", qty: "4" },
+          { hi: "2 छोटे चम्मच मक्खन या घी", en: "2 tsp butter or ghee", qty: "2 tsp" },
+          { hi: "70 ग्राम प्याज — बारीक कटा", en: "70g onion — finely chopped", qty: "70g" },
+          { hi: "70 ग्राम टमाटर — बारीक कटा", en: "70g tomato — finely chopped", qty: "70g" },
+          { hi: "2 हरी मिर्च — बारीक कटी", en: "2 green chillies — finely chopped", qty: "2" },
+          { hi: "नमक, जीरा, हल्दी, लाल मिर्च, पाव भाजी मसाला, हरा धनिया", en: "Salt, cumin, turmeric, red chilli, pav bhaji masala, fresh coriander", qty: "to taste" },
+          { hi: "साथ में: कोई भी एक सब्ज़ी — परिवार के खाने से", en: "Alongside: any one sabzi from family cooking", qty: "1 katori" },
         ],
         steps: [
-          { hi: "घी में जीरा, करी पत्ता — 20 सेकंड", en: "Ghee — cumin, curry leaves — 20 sec" },
-          { hi: "प्याज — 2 मिनट — अदरक-लहसुन पेस्ट — 1 मिनट", en: "Onion — 2 min — ginger-garlic paste — 1 min" },
-          { hi: "टमाटर — हल्दी, धनिया, गरम मसाला — 3 मिनट तेल छूटने तक", en: "Tomato — turmeric, coriander, garam masala — 3 min until oil separates" },
-          { hi: "पनीर क्यूब्स — 2 मिनट भूनें", en: "Paneer cubes — sauté 2 min" },
-          { hi: "उबले अंडे आधे काटें — ग्रेवी में डालें — 2 मिनट धीमी आंच", en: "Halve boiled eggs — fold into masala — 2 min low flame" },
-          { hi: "कसूरी मेथी मसलकर — हरा धनिया — गरम परोसें", en: "Crush kasuri methi — coriander — serve hot" },
+          { hi: "मक्खन में जीरा — प्याज और हरी मिर्च — 3 मिनट सुनहरा", en: "Butter — cumin — onion and green chilli — 3 min golden" },
+          { hi: "टमाटर — 2 मिनट — पाव भाजी मसाला — 30 सेकंड", en: "Tomato — 2 min — pav bhaji masala — 30 sec" },
+          { hi: "फेंटे अंडे — धीमी आंच — धीरे हिलाएं जब तक थोड़े नम रहें", en: "Whisked eggs — low heat — stir gently until just set, still slightly moist" },
+          { hi: "नमक — लाल मिर्च — नींबू — भरपूर हरा धनिया — गरम परोसें", en: "Salt — red chilli — lemon — generous coriander — serve hot" },
         ],
       },
       {
-        name: "Bhindi Egg Stir-Fry with Paneer",
+        name: "Paneer Lababdar",
         time: "6:30 PM",
-        protein: 44, carbs: 8, fat: 48, cal: 626,
+        protein: 43, carbs: 9, fat: 48, cal: 626,
         ingredients: [
-          { hi: "3 पूरे अंडे — फेंटे हुए", en: "3 whole eggs — whisked", qty: "3" },
-          { hi: "90 ग्राम पनीर — क्यूब्स", en: "90g paneer — cubes", qty: "90g" },
-          { hi: "2 छोटे चम्मच घी", en: "2 tsp ghee", qty: "2 tsp" },
-          { hi: "100 ग्राम भिंडी — गोल कटी", en: "100g bhindi — round sliced", qty: "100g" },
-          { hi: "30 ग्राम प्याज — बारीक कटा", en: "30g onion — finely chopped", qty: "30g" },
-          { hi: "50 ग्राम टमाटर — बारीक कटा", en: "50g tomato — finely chopped", qty: "50g" },
-          { hi: "नमक, सरसों, धनिया, अमचूर, हरा धनिया", en: "Salt, mustard seeds, coriander, amchur, fresh coriander", qty: "to taste" },
+          { hi: "100 ग्राम पनीर — मोटे क्यूब्स", en: "100g paneer — thick cubes", qty: "100g" },
+          { hi: "2 छोटे चम्मच मक्खन", en: "2 tsp butter", qty: "2 tsp" },
+          { hi: "60 ग्राम प्याज — बारीक कटा", en: "60g onion — finely chopped", qty: "60g" },
+          { hi: "80 ग्राम टमाटर — बारीक कटा", en: "80g tomato — finely chopped", qty: "80g" },
+          { hi: "1 छोटा चम्मच अदरक-लहसुन पेस्ट", en: "1 tsp ginger-garlic paste", qty: "1 tsp" },
+          { hi: "2 टेबलस्पून ताज़ी क्रीम", en: "2 tbsp fresh cream", qty: "2 tbsp" },
+          { hi: "नमक, जीरा, कश्मीरी लाल मिर्च, गरम मसाला, कसूरी मेथी", en: "Salt, cumin, Kashmiri red chilli, garam masala, kasuri methi", qty: "to taste" },
+          { hi: "साथ में: कोई भी एक सब्ज़ी — परिवार के खाने से", en: "Alongside: any one sabzi from family cooking", qty: "1 katori" },
         ],
         steps: [
-          { hi: "घी में भिंडी — तेज़ आंच — 4 मिनट सुनहरी और कुरकुरी — अलग रखें", en: "Ghee — bhindi — high heat — 4 min golden and crisp — set aside" },
-          { hi: "उसी घी में सरसों — प्याज 2 मिनट", en: "Same ghee — mustard seeds — onion 2 min" },
-          { hi: "टमाटर — मसाले — 2 मिनट", en: "Tomato — spices — 2 min" },
-          { hi: "पनीर क्यूब्स — 1 मिनट", en: "Paneer cubes — 1 min" },
-          { hi: "अंडे फोड़ें — भुर्जी बनाएं — भिंडी वापस डालें — मिलाएं", en: "Crack eggs — scramble — return bhindi — fold together" },
-          { hi: "अमचूर — हरा धनिया — गरम परोसें", en: "Amchur — fresh coriander — serve hot" },
+          { hi: "मक्खन में जीरा — प्याज 4 मिनट गहरा सुनहरा", en: "Butter — cumin — onion 4 min deep golden" },
+          { hi: "अदरक-लहसुन — 1 मिनट — टमाटर — 3 मिनट तेल छूटने तक", en: "Ginger-garlic — 1 min — tomato — 3 min until oil separates" },
+          { hi: "कश्मीरी लाल मिर्च — गरम मसाला — 1 मिनट", en: "Kashmiri red chilli — garam masala — 1 min" },
+          { hi: "क्रीम डालें — मिलाएं — पनीर क्यूब्स — 2 मिनट धीमी आंच", en: "Add cream — stir — paneer cubes — 2 min low flame" },
+          { hi: "कसूरी मेथी मसलकर — हरा धनिया — गरम परोसें", en: "Crush kasuri methi in — fresh coriander — serve hot" },
         ],
       },
     ],
     shake: true,
     grocery: [
-      { hi: "अंडे", en: "Eggs", qty: "6" },
-      { hi: "पनीर (फुल फैट)", en: "Paneer (full fat)", qty: "180g" },
-      { hi: "भिंडी", en: "Bhindi", qty: "100g" },
-      { hi: "प्याज़", en: "Onion", qty: "60g" },
-      { hi: "टमाटर", en: "Tomato", qty: "110g" },
-      { hi: "करी पत्ता", en: "Curry leaves", qty: "8-10" },
-      { hi: "घी", en: "Ghee", qty: "4 tsp" },
+      { hi: "अंडे", en: "Eggs", qty: "4" },
+      { hi: "पनीर (फुल फैट)", en: "Paneer (full fat)", qty: "100g" },
+      { hi: "प्याज़", en: "Onion", qty: "130g" },
+      { hi: "टमाटर", en: "Tomato", qty: "150g" },
+      { hi: "मक्खन", en: "Butter", qty: "4 tsp" },
+      { hi: "ताज़ी क्रीम", en: "Fresh cream", qty: "2 tbsp" },
       { hi: "Isopure Whey", en: "Isopure Whey", qty: "1 scoop" },
-      { hi: "खीरा / मूली", en: "Cucumber / Mooli", qty: "1" },
     ],
     totals: { protein: 110, carbs: 22, fat: 95, cal: 1350 },
   },
   {
     day: "Friday",
-    theme: "Karela Egg Paneer & Gobi Egg Bhurji",
+    theme: "Anda Masala & Paneer Tikka",
     meals: [
       {
-        name: "Karela Egg Paneer",
+        name: "Spicy Anda Masala",
         time: "2:00 PM",
-        protein: 41, carbs: 10, fat: 46, cal: 610,
+        protein: 42, carbs: 10, fat: 46, cal: 614,
         ingredients: [
-          { hi: "2 पूरे अंडे — फेंटे हुए", en: "2 whole eggs — whisked", qty: "2" },
-          { hi: "100 ग्राम पनीर — क्यूब्स", en: "100g paneer — cubes", qty: "100g" },
+          { hi: "4 पूरे अंडे — उबले और छिले", en: "4 whole eggs — boiled and peeled", qty: "4" },
           { hi: "2 छोटे चम्मच घी", en: "2 tsp ghee", qty: "2 tsp" },
-          { hi: "100 ग्राम करेला — पतला कटा, नमक लगाकर निचोड़ा हुआ", en: "100g karela — thinly sliced, salted and squeezed", qty: "100g" },
-          { hi: "30 ग्राम प्याज — बारीक कटा", en: "30g onion — finely chopped", qty: "30g" },
-          { hi: "50 ग्राम टमाटर — बारीक कटा", en: "50g tomato — finely chopped", qty: "50g" },
-          { hi: "नमक, सौंफ, धनिया, एक चुटकी गुड़ (वैकल्पिक)", en: "Salt, fennel seeds, coriander, pinch of jaggery (optional)", qty: "to taste" },
+          { hi: "70 ग्राम प्याज — बारीक कटा", en: "70g onion — finely chopped", qty: "70g" },
+          { hi: "80 ग्राम टमाटर — बारीक कटा", en: "80g tomato — finely chopped", qty: "80g" },
+          { hi: "1 छोटा चम्मच अदरक-लहसुन पेस्ट", en: "1 tsp ginger-garlic paste", qty: "1 tsp" },
+          { hi: "नमक, जीरा, हल्दी, लाल मिर्च, धनिया, गरम मसाला, अमचूर", en: "Salt, cumin, turmeric, red chilli, coriander, garam masala, amchur", qty: "to taste" },
+          { hi: "साथ में: कोई भी एक सब्ज़ी — परिवार के खाने से", en: "Alongside: any one sabzi from family cooking", qty: "1 katori" },
         ],
         steps: [
-          { hi: "करेला पतला काटें — नमक — 10 मिनट — अच्छे से निचोड़ें", en: "Slice karela thin — salt — 10 min — squeeze firmly" },
-          { hi: "घी में करेला — कुरकुरा होने तक भूनें — अलग रखें", en: "Ghee — fry karela until crisp — set aside" },
-          { hi: "उसी घी में सौंफ — प्याज 2 मिनट", en: "Same ghee — fennel seeds — onion 2 min" },
-          { hi: "टमाटर — मसाले — 2 मिनट", en: "Tomato — spices — 2 min" },
-          { hi: "पनीर क्यूब्स — 2 मिनट भूनें", en: "Paneer cubes — sauté 2 min" },
-          { hi: "अंडे फोड़ें — करेला वापस डालें — सब मिलाएं", en: "Crack eggs in — return karela — fold everything together" },
-          { hi: "एक चुटकी गुड़ (वैकल्पिक) — हरा धनिया — परोसें", en: "Pinch of jaggery (optional) — coriander — serve" },
+          { hi: "उबले अंडों को चाकू से स्कोर करें — घी में 2 मिनट रोल करें सुनहरा होने तक", en: "Score boiled eggs with knife — roll in ghee 2 min until golden outside" },
+          { hi: "उसी घी में जीरा — प्याज 4 मिनट — अदरक-लहसुन 1 मिनट", en: "Same ghee — cumin — onion 4 min — ginger-garlic 1 min" },
+          { hi: "टमाटर — 3 मिनट — सभी मसाले — 1 मिनट भूनें", en: "Tomato — 3 min — all spices — bhuno 1 min" },
+          { hi: "अमचूर डालें — अंडे डालें — 3 मिनट धीमी आंच — खट्टा-तीखा स्वाद", en: "Add amchur — add eggs — 3 min low flame — tangy and spicy flavour" },
+          { hi: "हरा धनिया — गरम परोसें", en: "Fresh coriander — serve hot" },
         ],
       },
       {
-        name: "Gobi Egg Bhurji with Paneer",
+        name: "Dahi Paneer Tikka (Tawa)",
         time: "6:30 PM",
-        protein: 44, carbs: 9, fat: 48, cal: 630,
+        protein: 43, carbs: 9, fat: 48, cal: 626,
         ingredients: [
-          { hi: "3 पूरे अंडे — फेंटे हुए", en: "3 whole eggs — whisked", qty: "3" },
-          { hi: "100 ग्राम पनीर — क्रम्बल्ड", en: "100g paneer — crumbled", qty: "100g" },
-          { hi: "2 छोटे चम्मच घी", en: "2 tsp ghee", qty: "2 tsp" },
-          { hi: "100 ग्राम फूल गोभी — छोटे फ्लोरेट्स", en: "100g cauliflower — small florets", qty: "100g" },
-          { hi: "30 ग्राम प्याज — बारीक कटा", en: "30g onion — finely chopped", qty: "30g" },
-          { hi: "नमक, सरसों, जीरा, हल्दी, अमचूर, काली मिर्च", en: "Salt, mustard seeds, cumin, turmeric, amchur, black pepper", qty: "to taste" },
+          { hi: "120 ग्राम पनीर — मोटे क्यूब्स", en: "120g paneer — thick cubes", qty: "120g" },
+          { hi: "3 टेबलस्पून हंग दही या गाढ़ा दही", en: "3 tbsp hung curd or thick dahi", qty: "3 tbsp" },
+          { hi: "1 छोटा चम्मच घी", en: "1 tsp ghee", qty: "1 tsp" },
+          { hi: "1 छोटा चम्मच तंदूरी मसाला", en: "1 tsp tandoori masala", qty: "1 tsp" },
+          { hi: "नमक, लाल मिर्च, हल्दी, अजवाइन, नींबू", en: "Salt, red chilli, turmeric, ajwain, lemon", qty: "to taste" },
+          { hi: "साथ में: कोई भी एक सब्ज़ी — परिवार के खाने से", en: "Alongside: any one sabzi from family cooking", qty: "1 katori" },
         ],
         steps: [
-          { hi: "घी में सरसों, जीरा — प्याज 2 मिनट सुनहरा", en: "Ghee — mustard seeds, cumin — onion 2 min golden" },
-          { hi: "फूल गोभी — 3 मिनट — थोड़ी कुरकुरी रखें", en: "Cauliflower — 3 min — keep slightly crunchy" },
-          { hi: "हल्दी, नमक — 1 मिनट भूनें", en: "Turmeric, salt — bhuno 1 min" },
-          { hi: "अंडे फोड़ें — धीरे भुर्जी बनाएं", en: "Crack eggs in — scramble gently" },
-          { hi: "पनीर क्रम्बल करके मिलाएं — 1 मिनट", en: "Fold in crumbled paneer — 1 min" },
-          { hi: "अमचूर — काली मिर्च — हरा धनिया — परोसें", en: "Amchur — black pepper — coriander — serve" },
+          { hi: "दही में तंदूरी मसाला, लाल मिर्च, हल्दी, अजवाइन, नमक, नींबू — मिलाएं", en: "Mix dahi with tandoori masala, red chilli, turmeric, ajwain, salt, lemon" },
+          { hi: "पनीर क्यूब्स मैरिनेड में डालें — 15 मिनट रखें (ज़्यादा हो तो और बेहतर)", en: "Add paneer cubes to marinade — rest 15 min (longer is better)" },
+          { hi: "तवे पर घी — तेज़ आंच — पनीर 2 मिनट प्रति साइड — बाहर से जला हुआ, अंदर नरम", en: "Tawa — ghee — high heat — paneer 2 min per side — charred outside, soft inside" },
+          { hi: "चाट मसाला — नींबू — प्याज के छल्ले साथ में — गरम परोसें", en: "Chaat masala — lemon — onion rings alongside — serve hot" },
         ],
       },
     ],
     shake: true,
     grocery: [
-      { hi: "अंडे", en: "Eggs", qty: "5" },
-      { hi: "पनीर (फुल फैट)", en: "Paneer (full fat)", qty: "200g" },
-      { hi: "करेला", en: "Karela", qty: "100g" },
-      { hi: "फूल गोभी", en: "Cauliflower", qty: "100g" },
-      { hi: "प्याज़", en: "Onion", qty: "60g" },
-      { hi: "टमाटर", en: "Tomato", qty: "50g" },
-      { hi: "घी", en: "Ghee", qty: "4 tsp" },
+      { hi: "अंडे", en: "Eggs", qty: "4" },
+      { hi: "पनीर (फुल फैट)", en: "Paneer (full fat)", qty: "120g" },
+      { hi: "प्याज़", en: "Onion", qty: "70g" },
+      { hi: "टमाटर", en: "Tomato", qty: "80g" },
+      { hi: "घी", en: "Ghee", qty: "3 tsp" },
       { hi: "Isopure Whey", en: "Isopure Whey", qty: "1 scoop" },
-      { hi: "खीरा / मूली", en: "Cucumber / Mooli", qty: "1" },
     ],
     totals: { protein: 110, carbs: 22, fat: 95, cal: 1350 },
   },
   {
     day: "Saturday",
-    theme: "Tandoori Paneer Egg Bhurji & Palak Andhra Egg",
+    theme: "Egg Keema & Paneer Do Pyaza",
     meals: [
       {
-        name: "Tandoori Paneer Egg Bhurji",
+        name: "Egg Keema Style",
         time: "2:00 PM",
-        protein: 42, carbs: 9, fat: 47, cal: 619,
+        protein: 42, carbs: 11, fat: 46, cal: 614,
         ingredients: [
-          { hi: "2 पूरे अंडे — फेंटे हुए", en: "2 whole eggs — whisked", qty: "2" },
-          { hi: "100 ग्राम पनीर — क्रम्बल्ड", en: "100g paneer — crumbled", qty: "100g" },
+          { hi: "4 पूरे अंडे — फेंटे हुए", en: "4 whole eggs — whisked", qty: "4" },
           { hi: "2 छोटे चम्मच घी", en: "2 tsp ghee", qty: "2 tsp" },
-          { hi: "60 ग्राम शिमला मिर्च — छोटे टुकड़े", en: "60g capsicum — small cubes", qty: "60g" },
-          { hi: "30 ग्राम प्याज — बारीक कटा", en: "30g onion — finely chopped", qty: "30g" },
-          { hi: "1 छोटा चम्मच तंदूरी मसाला", en: "1 tsp tandoori masala", qty: "1 tsp" },
-          { hi: "½ छोटा चम्मच चाट मसाला", en: "½ tsp chaat masala", qty: "½ tsp" },
-          { hi: "नमक, हरी मिर्च, नींबू, हरा धनिया", en: "Salt, green chilli, lemon, fresh coriander", qty: "to taste" },
+          { hi: "80 ग्राम प्याज — बहुत बारीक कटा", en: "80g onion — very finely chopped", qty: "80g" },
+          { hi: "60 ग्राम टमाटर — बारीक कटा", en: "60g tomato — finely chopped", qty: "60g" },
+          { hi: "1 छोटा चम्मच अदरक-लहसुन पेस्ट", en: "1 tsp ginger-garlic paste", qty: "1 tsp" },
+          { hi: "नमक, जीरा, हल्दी, लाल मिर्च, धनिया, गरम मसाला, हरा धनिया, पुदीना", en: "Salt, cumin, turmeric, red chilli, coriander, garam masala, fresh coriander, mint", qty: "to taste" },
+          { hi: "साथ में: कोई भी एक सब्ज़ी — परिवार के खाने से", en: "Alongside: any one sabzi from family cooking", qty: "1 katori" },
         ],
         steps: [
-          { hi: "घी में प्याज, हरी मिर्च — 1 मिनट", en: "Ghee — onion, green chilli — 1 min" },
-          { hi: "शिमला मिर्च — 1 मिनट कुरकुरी रखें", en: "Capsicum — 1 min keep crunchy" },
-          { hi: "तंदूरी मसाला — 30 सेकंड भूनें", en: "Tandoori masala — bhuno 30 sec" },
-          { hi: "अंडे फोड़ें — भुर्जी बनाएं", en: "Crack eggs in — make bhurji" },
-          { hi: "पनीर क्रम्बल करके मिलाएं — 1 मिनट", en: "Fold in crumbled paneer — 1 min" },
-          { hi: "चाट मसाला — नींबू — हरा धनिया — तुरंत परोसें", en: "Chaat masala — lemon — coriander — serve immediately" },
+          { hi: "घी में जीरा — प्याज बहुत बारीक — 5 मिनट गहरा भूनें — यही keema स्वाद देता है", en: "Ghee — cumin — very fine onion — 5 min deep fry — this gives the keema character" },
+          { hi: "अदरक-लहसुन — 1 मिनट — टमाटर — 2 मिनट", en: "Ginger-garlic — 1 min — tomato — 2 min" },
+          { hi: "सभी मसाले — 1 मिनट — फेंटे अंडे डालें", en: "All spices — 1 min — add whisked eggs" },
+          { hi: "धीमी आंच — लगातार हिलाते रहें — छोटे-छोटे टुकड़े बनाएं — keema जैसा texture", en: "Low heat — stir continuously — break into small pieces — keema-like texture" },
+          { hi: "हरा धनिया और पुदीना — नींबू — गरम परोसें", en: "Fresh coriander and mint — lemon — serve hot" },
         ],
       },
       {
-        name: "Palak Egg Masala with Paneer",
+        name: "Paneer Do Pyaza",
         time: "6:30 PM",
-        protein: 43, carbs: 10, fat: 47, cal: 619,
+        protein: 43, carbs: 8, fat: 48, cal: 626,
         ingredients: [
-          { hi: "3 पूरे अंडे — उबले", en: "3 whole eggs — boiled", qty: "3" },
-          { hi: "90 ग्राम पनीर — क्यूब्स", en: "90g paneer — cubes", qty: "90g" },
+          { hi: "100 ग्राम पनीर — मोटे क्यूब्स", en: "100g paneer — thick cubes", qty: "100g" },
           { hi: "2 छोटे चम्मच घी", en: "2 tsp ghee", qty: "2 tsp" },
-          { hi: "100 ग्राम पालक — बारीक कटी", en: "100g spinach — finely chopped", qty: "100g" },
-          { hi: "30 ग्राम प्याज — बारीक कटा", en: "30g onion — finely chopped", qty: "30g" },
-          { hi: "50 ग्राम टमाटर — बारीक कटा", en: "50g tomato — finely chopped", qty: "50g" },
-          { hi: "नमक, जीरा, करी पत्ता, हल्दी, गरम मसाला, लाल मिर्च", en: "Salt, cumin, curry leaves, turmeric, garam masala, red chilli", qty: "to taste" },
+          { hi: "100 ग्राम प्याज — दो भागों में (आधा बारीक, आधा मोटे छल्ले)", en: "100g onion — in two parts (half fine, half thick rings)", qty: "100g" },
+          { hi: "60 ग्राम टमाटर — बारीक कटा", en: "60g tomato — finely chopped", qty: "60g" },
+          { hi: "1 छोटा चम्मच अदरक-लहसुन पेस्ट", en: "1 tsp ginger-garlic paste", qty: "1 tsp" },
+          { hi: "नमक, जीरा, हल्दी, लाल मिर्च, धनिया, गरम मसाला", en: "Salt, cumin, turmeric, red chilli, coriander, garam masala", qty: "to taste" },
+          { hi: "साथ में: कोई भी एक सब्ज़ी — परिवार के खाने से", en: "Alongside: any one sabzi from family cooking", qty: "1 katori" },
         ],
         steps: [
-          { hi: "घी में जीरा, करी पत्ता — प्याज 2 मिनट", en: "Ghee — cumin, curry leaves — onion 2 min" },
-          { hi: "टमाटर — मसाले — 2 मिनट तेल छूटने तक", en: "Tomato — spices — 2 min until oil separates" },
-          { hi: "पालक डालें — 2 मिनट मुरझाने तक", en: "Add spinach — 2 min until wilted" },
+          { hi: "घी में जीरा — बारीक प्याज 4 मिनट गहरा सुनहरा — यह base है", en: "Ghee — cumin — fine onion 4 min deep golden — this is the base" },
+          { hi: "अदरक-लहसुन — 1 मिनट — टमाटर — 2 मिनट — सभी मसाले — 1 मिनट", en: "Ginger-garlic — 1 min — tomato — 2 min — all spices — 1 min" },
           { hi: "पनीर क्यूब्स — 2 मिनट भूनें", en: "Paneer cubes — sauté 2 min" },
-          { hi: "उबले अंडे आधे काटें — ग्रेवी में डालें — 2 मिनट", en: "Halve boiled eggs — fold into gravy — 2 min" },
-          { hi: "कसूरी मेथी — हरा धनिया — गरम परोसें", en: "Kasuri methi — coriander — serve hot" },
+          { hi: "अब मोटे प्याज छल्ले डालें — 1 मिनट — कुरकुरे रहें", en: "Now add thick onion rings — 1 min — keep crunchy — this is the do pyaza" },
+          { hi: "हरा धनिया — गरम परोसें", en: "Fresh coriander — serve hot" },
         ],
       },
     ],
     shake: true,
     grocery: [
-      { hi: "अंडे", en: "Eggs", qty: "5" },
-      { hi: "पनीर (फुल फैट)", en: "Paneer (full fat)", qty: "190g" },
-      { hi: "पालक", en: "Spinach", qty: "100g" },
-      { hi: "शिमला मिर्च", en: "Capsicum", qty: "60g" },
-      { hi: "प्याज़", en: "Onion", qty: "60g" },
-      { hi: "टमाटर", en: "Tomato", qty: "50g" },
+      { hi: "अंडे", en: "Eggs", qty: "4" },
+      { hi: "पनीर (फुल फैट)", en: "Paneer (full fat)", qty: "100g" },
+      { hi: "प्याज़", en: "Onion", qty: "180g" },
+      { hi: "टमाटर", en: "Tomato", qty: "120g" },
       { hi: "घी", en: "Ghee", qty: "4 tsp" },
       { hi: "Isopure Whey", en: "Isopure Whey", qty: "1 scoop" },
-      { hi: "खीरा / मूली", en: "Cucumber / Mooli", qty: "1" },
     ],
     totals: { protein: 110, carbs: 22, fat: 95, cal: 1350 },
   },
   {
     day: "Sunday",
-    theme: "Egg Paneer Bhurji Methi & Baingan Egg Masala",
+    theme: "Anda Tadka & Paneer Bhurji",
     meals: [
       {
-        name: "Paneer Egg Bhurji with Methi",
+        name: "Anda Tadka",
         time: "2:00 PM",
-        protein: 41, carbs: 10, fat: 46, cal: 610,
+        protein: 42, carbs: 10, fat: 46, cal: 614,
         ingredients: [
-          { hi: "2 पूरे अंडे — फेंटे हुए", en: "2 whole eggs — whisked", qty: "2" },
-          { hi: "100 ग्राम पनीर — क्रम्बल्ड", en: "100g paneer — crumbled", qty: "100g" },
+          { hi: "4 पूरे अंडे — उबले और छिले", en: "4 whole eggs — boiled and peeled", qty: "4" },
           { hi: "2 छोटे चम्मच घी", en: "2 tsp ghee", qty: "2 tsp" },
-          { hi: "50 ग्राम मेथी पत्तियां — बारीक कटी", en: "50g methi leaves — finely chopped", qty: "50g" },
-          { hi: "80 ग्राम पालक — बारीक कटी", en: "80g spinach — finely chopped", qty: "80g" },
-          { hi: "30 ग्राम प्याज — बारीक कटा", en: "30g onion — finely chopped", qty: "30g" },
-          { hi: "नमक, जीरा, हींग, हल्दी, लाल मिर्च, अदरक कद्दूकस", en: "Salt, cumin, asafoetida, turmeric, red chilli, grated ginger", qty: "to taste" },
+          { hi: "70 ग्राम प्याज — बारीक कटा", en: "70g onion — finely chopped", qty: "70g" },
+          { hi: "80 ग्राम टमाटर — बारीक कटा", en: "80g tomato — finely chopped", qty: "80g" },
+          { hi: "नमक, जीरा, सरसों, लहसुन 3-4 कलियां — पिसी हुई, लाल मिर्च, करी पत्ता", en: "Salt, cumin, mustard, 3-4 garlic cloves — crushed, red chilli, curry leaves", qty: "to taste" },
+          { hi: "साथ में: कोई भी एक सब्ज़ी — परिवार के खाने से", en: "Alongside: any one sabzi from family cooking", qty: "1 katori" },
         ],
         steps: [
-          { hi: "घी में जीरा, हींग — 15 सेकंड", en: "Ghee — cumin, asafoetida — 15 sec" },
-          { hi: "प्याज 2 मिनट — कद्दूकस अदरक 30 सेकंड", en: "Onion 2 min — grated ginger 30 sec" },
-          { hi: "मेथी और पालक — 2 मिनट मुरझाने तक", en: "Methi and spinach — 2 min until wilted" },
-          { hi: "हल्दी, लाल मिर्च — 1 मिनट", en: "Turmeric, red chilli — 1 min" },
-          { hi: "अंडे फोड़ें — धीरे भुर्जी बनाएं", en: "Crack eggs in — scramble gently" },
-          { hi: "पनीर क्रम्बल करके मिलाएं — नमक — हरा धनिया — परोसें", en: "Fold in crumbled paneer — salt — coriander — serve" },
+          { hi: "उबले अंडे आधे काटें — एक तरफ रखें", en: "Halve boiled eggs — set aside" },
+          { hi: "घी गरम करें — सरसों, जीरा, करी पत्ता — 20 सेकंड तड़कने दें", en: "Heat ghee — mustard, cumin, curry leaves — splutter 20 sec" },
+          { hi: "पिसा लहसुन — 30 सेकंड — प्याज — 3 मिनट — टमाटर — 2 मिनट", en: "Crushed garlic — 30 sec — onion — 3 min — tomato — 2 min" },
+          { hi: "लाल मिर्च भरपूर — नमक — 30 सेकंड", en: "Generous red chilli — salt — 30 sec" },
+          { hi: "आधे अंडे cut side नीचे रखें — 1 मिनट — तड़का ऊपर से डालें", en: "Place egg halves cut side down — 1 min — pour tadka over" },
+          { hi: "करी पत्ता गार्निश — तुरंत परोसें", en: "Curry leaf garnish — serve immediately" },
         ],
       },
       {
-        name: "Baingan Egg Masala with Paneer",
+        name: "Masala Paneer Bhurji",
         time: "6:30 PM",
-        protein: 44, carbs: 9, fat: 48, cal: 628,
+        protein: 43, carbs: 9, fat: 48, cal: 626,
         ingredients: [
-          { hi: "3 पूरे अंडे — उबले", en: "3 whole eggs — boiled", qty: "3" },
-          { hi: "90 ग्राम पनीर — क्यूब्स", en: "90g paneer — cubes", qty: "90g" },
+          { hi: "120 ग्राम पनीर — क्रम्बल्ड", en: "120g paneer — crumbled", qty: "120g" },
           { hi: "2 छोटे चम्मच घी", en: "2 tsp ghee", qty: "2 tsp" },
-          { hi: "120 ग्राम बैंगन — छोटे टुकड़े", en: "120g baingan — small cubes", qty: "120g" },
-          { hi: "30 ग्राम प्याज — बारीक कटा", en: "30g onion — finely chopped", qty: "30g" },
+          { hi: "70 ग्राम प्याज — बारीक कटा", en: "70g onion — finely chopped", qty: "70g" },
           { hi: "60 ग्राम टमाटर — बारीक कटा", en: "60g tomato — finely chopped", qty: "60g" },
-          { hi: "नमक, जीरा, हल्दी, धनिया, गरम मसाला, हरा धनिया", en: "Salt, cumin, turmeric, coriander, garam masala, fresh coriander", qty: "to taste" },
+          { hi: "2-3 हरी मिर्च — बारीक कटी", en: "2-3 green chillies — finely chopped", qty: "2-3" },
+          { hi: "नमक, जीरा, हल्दी, लाल मिर्च, चाट मसाला, हरा धनिया, नींबू", en: "Salt, cumin, turmeric, red chilli, chaat masala, fresh coriander, lemon", qty: "to taste" },
+          { hi: "साथ में: कोई भी एक सब्ज़ी — परिवार के खाने से", en: "Alongside: any one sabzi from family cooking", qty: "1 katori" },
         ],
         steps: [
-          { hi: "घी में बैंगन — 4 मिनट नरम और हल्का सुनहरा — अलग रखें", en: "Ghee — baingan — 4 min soft and lightly golden — set aside" },
-          { hi: "उसी घी में जीरा — प्याज 2 मिनट", en: "Same ghee — cumin — onion 2 min" },
-          { hi: "टमाटर — मसाले — 2 मिनट तेल छूटने तक", en: "Tomato — spices — 2 min until oil separates" },
-          { hi: "बैंगन वापस डालें — पनीर क्यूब्स — 2 मिनट", en: "Return baingan — paneer cubes — 2 min" },
-          { hi: "उबले अंडे आधे काटें — ग्रेवी में डालें — 1 मिनट", en: "Halve boiled eggs — fold into gravy — 1 min" },
-          { hi: "गरम मसाला — हरा धनिया — गरम परोसें", en: "Garam masala — coriander — serve hot" },
+          { hi: "घी में जीरा — हरी मिर्च — प्याज 3 मिनट तेज़ आंच पर सुनहरा", en: "Ghee — cumin — green chilli — onion 3 min high heat golden" },
+          { hi: "टमाटर — हल्दी — लाल मिर्च — 2 मिनट तेल छूटने तक", en: "Tomato — turmeric — red chilli — 2 min until oil separates" },
+          { hi: "क्रम्बल्ड पनीर — तेज़ आंच — 2 मिनट — थोड़ा सुनहरा होने दें", en: "Crumbled paneer — high heat — 2 min — let it get slightly golden" },
+          { hi: "चाट मसाला — नींबू भरपूर — हरा धनिया — तुरंत परोसें", en: "Chaat masala — generous lemon — fresh coriander — serve immediately" },
         ],
       },
     ],
     shake: true,
     grocery: [
-      { hi: "अंडे", en: "Eggs", qty: "5" },
-      { hi: "पनीर (फुल फैट)", en: "Paneer (full fat)", qty: "190g" },
-      { hi: "बैंगन", en: "Baingan", qty: "120g" },
-      { hi: "मेथी पत्तियां", en: "Methi leaves", qty: "50g" },
-      { hi: "पालक", en: "Spinach", qty: "80g" },
-      { hi: "प्याज़", en: "Onion", qty: "60g" },
-      { hi: "टमाटर", en: "Tomato", qty: "60g" },
+      { hi: "अंडे", en: "Eggs", qty: "4" },
+      { hi: "पनीर (फुल फैट)", en: "Paneer (full fat)", qty: "120g" },
+      { hi: "प्याज़", en: "Onion", qty: "140g" },
+      { hi: "टमाटर", en: "Tomato", qty: "140g" },
+      { hi: "हरी मिर्च", en: "Green chillies", qty: "5-6" },
+      { hi: "करी पत्ता", en: "Curry leaves", qty: "10-12" },
       { hi: "घी", en: "Ghee", qty: "4 tsp" },
       { hi: "Isopure Whey", en: "Isopure Whey", qty: "1 scoop" },
-      { hi: "खीरा / मूली", en: "Cucumber / Mooli", qty: "1" },
     ],
     totals: { protein: 110, carbs: 22, fat: 95, cal: 1350 },
   },
 ];
-
-
 
 
 
@@ -1707,6 +1670,7 @@ const S = {
   startDate: LS.get('prog_start',''),
   goalWeight: LS.get('goal_weight', 80),
   diet: LS.get('diet_mode','keto'),
+  partyDay: LS.get('party_day','') === isoToday(),
   doneEx: LS.get('done_ex_'+isoToday(),[]),
   fastElapsed:0, fastTimer:null,
   srch:'', sel:null, qty:1, nixSearching:false, nixResults:[], logTab:'search', browsecat:'Eggs', logTime:'',
@@ -1826,6 +1790,149 @@ function effectiveTmrMeal(slot) {
   const tp = tmrPlan();
   return slot==='m0' ? tp.meals?.[0] : tp.meals?.[1];
 }
+
+function togglePartyDay() {
+  S.partyDay = !S.partyDay;
+  LS.set('party_day', S.partyDay ? isoToday() : '');
+  render();
+}
+
+function PartyMealCard() {
+
+  function menuSection(emoji, title, items, color) {
+    return `<div style="margin-bottom:10px">
+      <div style="font-size:12px;font-weight:700;color:${color};margin-bottom:4px">${emoji} ${title}</div>
+      ${items.map(i => `<div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #F5F0E8">
+        <span style="font-size:12px;color:var(--dark)">${i[0]}</span>
+        <span style="font-size:11px;color:#888;font-style:italic">${i[1]}</span>
+      </div>`).join('')}
+    </div>`;
+  }
+
+  function avoidSection(items) {
+    return `<div style="background:#FFF0F0;border-radius:8px;padding:8px;margin-bottom:10px;border:1px solid #FFCDD2">
+      <div style="font-size:12px;font-weight:700;color:#8B0000;margin-bottom:4px">\u274C Avoid</div>
+      ${items.map(i => `<div style="font-size:12px;color:#555;padding:2px 0">\u2022 ${i}</div>`).join('')}
+    </div>`;
+  }
+
+  function tabBtn(id, label, active) {
+    return `<button onclick="document.querySelectorAll('.ptab-content').forEach(e=>e.style.display='none');document.querySelectorAll('.ptab-btn').forEach(e=>{e.style.background='#FFF3CD';e.style.color='#7B4F00';e.style.fontWeight='400'});document.getElementById('${id}').style.display='block';this.style.background='#FF8F00';this.style.color='#fff';this.style.fontWeight='700'"
+      class="ptab-btn" style="flex:1;padding:8px 4px;border:none;border-radius:8px;font-size:12px;cursor:pointer;background:${active?'#FF8F00':'#FFF3CD'};color:${active?'#fff':'#7B4F00'};font-weight:${active?'700':'400'}">${label}</button>`;
+  }
+
+  return `
+    <div class="card" style="border:2px solid #FF8F00;background:linear-gradient(135deg,#FFF8E7,#FFF3CD)">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+        <span style="font-size:22px">\uD83C\uDF89</span>
+        <div>
+          <div style="font-size:15px;font-weight:700;color:#7B4F00">Party Day Mode</div>
+          <div style="font-size:11px;color:#A06000">Fast through the day \u00B7 One meal at 8\u20139 PM \u00B7 Whey shake before leaving</div>
+        </div>
+      </div>
+      <div style="background:#FFF3CD;border-radius:10px;padding:10px;margin-bottom:14px;border:1px solid #FFD54F">
+        <div style="font-size:12px;font-weight:700;color:#7B4F00;margin-bottom:6px">The Plan</div>
+        <div style="font-size:12px;color:#555;line-height:1.7">
+          <b>Before leaving:</b> Whey shake + 1 glass water \u2014 non-negotiable. You arrive not starving.<br>
+          <b>At the party:</b> Protein first, always. Fill plate with the right things before anything else.<br>
+          <b>Late meal (8\u20139 PM):</b> One large meal at home or at the party. Log it.<br>
+          <b>Next morning:</b> Sodium from party food will show +0.5\u20131.5kg on scale \u2014 water weight, not fat.
+        </div>
+      </div>
+      <div style="display:flex;gap:6px;margin-bottom:12px">
+        ${tabBtn('ptab-house','\uD83C\uDFE0 House Party', true)}
+        ${tabBtn('ptab-buffet','\uD83C\uDF7D Buffet / Hall', false)}
+        ${tabBtn('ptab-alcohol','\uD83E\uDD43 If Drinking', false)}
+      </div>
+
+      <div id="ptab-house" class="ptab-content">
+        <div style="font-size:11px;color:#888;margin-bottom:10px;font-style:italic">Typical home spread \u2014 you don\u2019t control the menu but you control your plate</div>
+        ${menuSection('\u2705','Load up on these',[
+          ['Paneer tikka / paneer bhurji','2\u20133 generous pieces'],
+          ['Boiled / masala eggs if available','3\u20134 eggs'],
+          ['Dal makhani / rajma \u2014 small katori','Protein + fibre'],
+          ['Raita \u2014 a bowl','Protein, cooling effect'],
+          ['Salad \u2014 load it first before hot food','Fill half the plate'],
+          ['Any dry sabzi \u2014 bhindi, gobi, jeera aloo','1\u20132 katoris'],
+        ],'#1A5C1A')}
+        ${avoidSection([
+          'Rice and roti \u2014 skip or max 1 roti if social pressure is unavoidable',
+          'Mithai / dessert \u2014 one piece maximum, only after protein is done',
+          'Namkeen, chips, mathri \u2014 empty carbs before the meal',
+          'Halwa, kheer, gulab jamun \u2014 skip entirely if you can',
+        ])}
+        <div style="background:#E8F5E9;border-radius:8px;padding:8px;border:1px solid #C8E6C9">
+          <div style="font-size:12px;font-weight:700;color:#1A5C1A;margin-bottom:4px">\uD83D\uDCA1 Social hack</div>
+          <div style="font-size:12px;color:#555">Take a full plate \u2014 just fill it with the right things. An empty plate invites attention and pressure. A full plate of salad + paneer + dal looks completely normal.</div>
+        </div>
+      </div>
+
+      <div id="ptab-buffet" class="ptab-content" style="display:none">
+        <div style="font-size:11px;color:#888;margin-bottom:10px;font-style:italic">Restaurant or banquet hall \u2014 larger spread, more choices, easier to navigate</div>
+        ${menuSection('\u2705','Starters \u2014 go here first',[
+          ['Paneer tikka / malai tikka','3\u20134 pieces \u2014 your protein anchor'],
+          ['Hara bhara kabab / veg shammi','2\u20133 pieces'],
+          ['Soup \u2014 tomato / hot & sour','1 bowl \u2014 fills space, low cal'],
+          ['Salad bar','Half the plate before anything hot'],
+        ],'#1A5C1A')}
+        ${menuSection('\u2705','Main course \u2014 selective',[
+          ['Dal makhani or dal tadka','1 katori \u2014 best protein in main course'],
+          ['Paneer dish \u2014 whatever is available','1 katori'],
+          ['Raita','1 bowl'],
+          ['1 tandoori roti \u2014 maximum','Only if genuinely hungry after starters'],
+        ],'#006D6D')}
+        ${avoidSection([
+          'Biryani / pulao \u2014 rice carbs knock you out of keto for 2\u20133 days',
+          'Naan and butter naan \u2014 avoid entirely',
+          'Fried starters \u2014 samosa, spring roll, bread pakora',
+          'Dessert buffet \u2014 one small piece if truly unavoidable, after protein only',
+        ])}
+        <div style="background:#E8F5E9;border-radius:8px;padding:8px;border:1px solid #C8E6C9">
+          <div style="font-size:12px;font-weight:700;color:#1A5C1A;margin-bottom:4px">\uD83D\uDCA1 Buffet strategy</div>
+          <div style="font-size:12px;color:#555">Walk the entire buffet once before picking up a plate. Identify your 4\u20135 target items. Then go back and take only those. People who scan first eat better than people who fill plates as they walk.</div>
+        </div>
+      </div>
+
+      <div id="ptab-alcohol" class="ptab-content" style="display:none">
+        <div style="font-size:11px;color:#888;margin-bottom:10px;font-style:italic">Honest guidance \u2014 not a lecture</div>
+        <div style="background:#FFF3CD;border-radius:8px;padding:10px;margin-bottom:10px;border:1px solid #FFD54F">
+          <div style="font-size:12px;font-weight:700;color:#7B4F00;margin-bottom:6px">\u26A0\uFE0F On keto your alcohol tolerance is significantly lower</div>
+          <div style="font-size:12px;color:#555;line-height:1.7">Glycogen stores are depleted on keto. Your liver processes alcohol first and cannot maintain blood sugar simultaneously. You get drunk faster, feel it harder, hangover is worse. Plan accordingly.</div>
+        </div>
+        ${menuSection('\u2705','Lower damage choices',[
+          ['Whisky / scotch \u2014 neat or with soda water','~65 kcal per 30ml, zero carbs'],
+          ['Vodka \u2014 with soda water + lime','~65 kcal per 30ml, zero carbs'],
+          ['Dry red wine','~125 kcal per 150ml, ~4g carbs'],
+          ['Gin + slimline tonic','~65 kcal, near-zero carbs'],
+        ],'#006D6D')}
+        ${avoidSection([
+          'Beer \u2014 150\u2013200 kcal, 12\u201315g carbs per bottle \u2014 knocks you out of keto fast',
+          'Cocktails with juice or syrup \u2014 200\u2013400 kcal, 25\u201340g carbs each',
+          'Rum + cola, whisky + regular soda \u2014 sugar load on top of alcohol',
+          'Sweet wine or champagne \u2014 higher carbs than dry wine',
+        ])}
+        <div style="background:#F3F0F9;border-radius:8px;padding:10px;margin-bottom:10px;border:1px solid #D1C4E9">
+          <div style="font-size:12px;font-weight:700;color:#4A1870;margin-bottom:4px">Olmesartan + alcohol</div>
+          <div style="font-size:12px;color:#555;line-height:1.7">Olmesartan lowers blood pressure. Alcohol also lowers blood pressure. Together they can cause a pronounced drop \u2014 dizziness especially when standing up quickly. Rise slowly. Eat before your first drink.</div>
+        </div>
+        ${menuSection('\u2705','Protect yourself while drinking',[
+          ['Whey shake before the first drink','Slows absorption, lines the stomach'],
+          ['Paneer tikka while drinking','Protein slows alcohol absorption'],
+          ['1 glass water between every drink','Best hangover prevention there is'],
+          ['Nimbu pani or soda lime before bed','Electrolytes \u2014 reduces morning headache'],
+        ],'#1A5C1A')}
+        <div style="background:#FFEBEE;border-radius:8px;padding:8px;border:1px solid #FFCDD2">
+          <div style="font-size:12px;font-weight:700;color:#8B0000;margin-bottom:4px">Next morning reality</div>
+          <div style="font-size:12px;color:#555">Scale will likely show +1\u20132kg. Alcohol causes water retention and sodium from party food compounds it. This is not fat \u2014 it clears in 2\u20133 days. Do not restrict calories the next day to compensate. Eat normally, drink extra water, resume plan.</div>
+        </div>
+      </div>
+
+      <button onclick="togglePartyDay()" style="width:100%;margin-top:14px;padding:10px;background:#FFECB3;color:#7B4F00;border:1px solid #FFD54F;border-radius:10px;font-size:13px;font-weight:700">
+        \u2715 Cancel Party Mode \u2014 Switch back to normal plan
+      </button>
+    </div>`;
+}
+
 
 function openSwap(slot, isTmr=false) {
   if(isTmr) { S.tmrSwapSlot = S.tmrSwapSlot===slot ? null : slot; S.swapSlot=null; }
@@ -2608,7 +2715,13 @@ function MealRow(meal,time,label,key,isTmr=false) {
     : (key==='m0'&&S.swappedM0) || (key==='m1'&&S.swappedM1);
   const mealKey = key+(isTmr?'_tmr':'');
   const mealIndex = key==='m0' ? 0 : 1;
-  const alreadyLogged = S.day.entries.some(e => e.name === meal.name);
+  const alreadyLogged = S.day.entries.some(e => 
+    e.name === meal.name ||
+    (e.name && meal.name && (
+      e.name.toLowerCase().includes(meal.name.toLowerCase().substring(0,12)) ||
+      meal.name.toLowerCase().includes(e.name.toLowerCase().substring(0,12))
+    ))
+  );
   const ings=(meal.ingredients||[]).map(i=>`
     <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #F0F0F0">
       <span style="font-size:12px;color:var(--dark)">${i.hi}</span>
@@ -2777,10 +2890,26 @@ function tabToday() {
 
   // Task bubbles — 9 tasks in specified order
   const _t = tots(), _tg = tgt();
-  // Meals bubble: count how many planned meals are logged
+  // Meals bubble: count logged meals from plan
+  // Fuzzy match — logged entry name contains plan meal name or vice versa
+  // Also counts any meal logged at plan meal times (2:00 PM, 6:30 PM)
   const _plannedMeals = todayPlan()?.meals || [];
-  const _loggedMealCount = _plannedMeals.filter(m => (S.day.entries||[]).some(e => e.name === m.name)).length;
-  const _totalMeals = _plannedMeals.length || 2;
+  const _entries = S.day.entries || [];
+  const _planTimes = _plannedMeals.map(m => m.time);
+  const _loggedMealCount = S.partyDay
+    ? Math.min(_entries.filter(e => (e.cal||e.calories||0) > 300 && !e.name?.toLowerCase().includes('whey') && !e.name?.toLowerCase().includes('shake')).length, 1)
+    : (_plannedMeals.filter(m =>
+        _entries.some(e =>
+          e.name === m.name ||
+          (e.name && m.name && (
+            e.name.toLowerCase().includes(m.name.toLowerCase().substring(0,12)) ||
+            m.name.toLowerCase().includes(e.name.toLowerCase().substring(0,12))
+          )) ||
+          (e.mealTime && e.mealTime === m.time)
+        )
+      ).length ||
+      Math.min(_entries.filter(e => (e.cal||e.calories||0) > 200 && !e.name?.toLowerCase().includes('whey') && !e.name?.toLowerCase().includes('shake')).length, _plannedMeals.length));
+  const _totalMeals = S.partyDay ? 1 : (_plannedMeals.length || 2);
   const _mealFrac = _loggedMealCount / _totalMeals; // 0, 0.5, 1
 
   const _tasks = [
@@ -2868,6 +2997,7 @@ function tabToday() {
 
     ${renderProteinWarning(t.protein, tg.protein)}
 
+    ${S.partyDay ? PartyMealCard() : `
     <div class="card">
       <div class="sec" style="margin-bottom:4px">🍽 Meal 1 · 2:00 PM</div>
       ${MealRow(effectiveMeal('m0'), '2:00 PM', 'Meal 1', 'm0', false)}
@@ -2882,6 +3012,17 @@ function tabToday() {
       <div class="sec" style="margin-bottom:4px">🍽 Meal 2 · 6:30 PM</div>
       ${MealRow(effectiveMeal('m1'), '6:30 PM', 'Meal 2', 'm1', false)}
     </div>
+
+    <div class="card" style="border:1px dashed #FFD54F;background:#FFFDE7">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <div style="font-size:13px;font-weight:700;color:#7B4F00">🎉 Party tonight?</div>
+          <div style="font-size:11px;color:#A06000;margin-top:2px">Switch to one late meal mode</div>
+        </div>
+        <button onclick="togglePartyDay()" style="padding:8px 14px;background:#FF8F00;color:#fff;border:none;border-radius:10px;font-size:12px;font-weight:700">Party Day</button>
+      </div>
+    </div>
+    `}
 
     <div class="card">
       <div class="sec" style="margin-bottom:8px">💧 Water</div>
