@@ -1,48 +1,42 @@
-const CACHE = 'health-tracker-v2.30';
-const ASSETS = ['/', '/index.html', '/manifest.json', '/foods.json', '/icon-192.png', '/icon-512.png'];
+// LabFlow Service Worker — v19.44
+const CACHE_NAME = 'labflow-v19.44';
 
-self.addEventListener('install', e => {
-  e.waitUntil(
-    caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting())
+const PRECACHE = [
+  '/oneplus-lms/index.html',
+  '/oneplus-lms/manifest.json',
+  '/oneplus-lms/icon-192.png',
+  '/oneplus-lms/icon-512.png',
+];
+
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(cache => cache.addAll(PRECACHE)).then(() => self.skipWaiting())
   );
 });
 
-self.addEventListener('activate', e => {
-  e.waitUntil(
-    caches.keys()
-      .then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
-      .then(() => self.clients.claim())
-      .then(() => self.clients.matchAll())
-      .then(clients => clients.forEach(c => c.postMessage({ type: 'SW_UPDATED' })))
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
+    ).then(() => self.clients.claim())
   );
 });
 
-self.addEventListener('message', e => {
-  if(e.data && e.data.type === 'GET_VERSION') {
-    e.source.postMessage({ type: 'SW_VERSION', version: CACHE });
-  }
-  if(e.data && e.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
-  }
-});
+self.addEventListener('fetch', event => {
+  const url = new URL(event.request.url);
+  if (event.request.method !== 'GET') return;
+  if (url.hostname.includes('googleapis.com')) return;
+  if (url.hostname.includes('gstatic.com')) return;
+  if (url.hostname.includes('firebaseio.com')) return;
 
-self.addEventListener('fetch', e => {
-  const url = new URL(e.request.url);
-  if(url.pathname === '/' || url.pathname === '/index.html') {
-    e.respondWith(
-      fetch(e.request, { cache: 'no-cache' })
-        .then(res => { const rc = res.clone(); caches.open(CACHE).then(c => c.put(e.request, rc)); return res; })
-        .catch(() => caches.match('/index.html'))
-    );
-    return;
-  }
-  if(url.pathname === '/foods.json') {
-    e.respondWith(
-      fetch(e.request, { cache: 'no-cache' })
-        .then(res => { const rc = res.clone(); caches.open(CACHE).then(c => c.put(e.request, rc)); return res; })
-        .catch(() => caches.match(e.request))
-    );
-    return;
-  }
-  e.respondWith(caches.match(e.request).then(cached => cached || fetch(e.request)));
+  // Network first, fall back to cache
+  event.respondWith(
+    fetch(event.request)
+      .then(response => {
+        const clone = response.clone();
+        caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
+        return response;
+      })
+      .catch(() => caches.match(event.request))
+  );
 });
